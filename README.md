@@ -16,8 +16,11 @@ INSTALLATION GUIDE
 - Download Python (anaconda)
 	https://www.continuum.io/downloads
 
-- In a conda prompt window, type:
-	conda env create -f environments.yml
+- In a conda prompt window
+	Go to:
+		ADAS_Tester\Assets\SampleScenes\Python
+	Type:
+		conda env create -f environments.yml
 		
 To launch the driving car controled with python script:
 
