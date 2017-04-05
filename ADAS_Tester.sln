@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ADAS_Tester.Plugins", "ADAS_Tester.Plugins.csproj", "{91C7CCFE-FCE8-AAFE-7D7B-6C4E40AAC120}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ADAS_Tester", "ADAS_Tester.csproj", "{56E19D26-1D1C-22B7-30EF-1CD5A34E551A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ADAS_Tester.Editor.Plugins", "ADAS_Tester.Editor.Plugins.csproj", "{2572AFE0-C87C-2458-6132-860D724ADF53}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ADAS_Tester.Editor", "ADAS_Tester.Editor.csproj", "{02F5D013-C16C-A3DA-F18C-9384429F5567}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{91C7CCFE-FCE8-AAFE-7D7B-6C4E40AAC120}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91C7CCFE-FCE8-AAFE-7D7B-6C4E40AAC120}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91C7CCFE-FCE8-AAFE-7D7B-6C4E40AAC120}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91C7CCFE-FCE8-AAFE-7D7B-6C4E40AAC120}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56E19D26-1D1C-22B7-30EF-1CD5A34E551A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56E19D26-1D1C-22B7-30EF-1CD5A34E551A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56E19D26-1D1C-22B7-30EF-1CD5A34E551A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56E19D26-1D1C-22B7-30EF-1CD5A34E551A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2572AFE0-C87C-2458-6132-860D724ADF53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2572AFE0-C87C-2458-6132-860D724ADF53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2572AFE0-C87C-2458-6132-860D724ADF53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2572AFE0-C87C-2458-6132-860D724ADF53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02F5D013-C16C-A3DA-F18C-9384429F5567}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02F5D013-C16C-A3DA-F18C-9384429F5567}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02F5D013-C16C-A3DA-F18C-9384429F5567}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02F5D013-C16C-A3DA-F18C-9384429F5567}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
