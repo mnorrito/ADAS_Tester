@@ -25,7 +25,7 @@ INSTALLATION GUIDE
 To launch the driving car controled with python script:
 
 	To activate python env cariables:
-		activate car-behavioral-cloning
+		activate ADAS_Tester
 
 	To launch the python script:
 		ADAS_Tester\Assets\SampleScenes\Python
