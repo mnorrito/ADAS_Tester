@@ -21,16 +21,21 @@ INSTALLATION GUIDE
 		ADAS_Tester\Assets\SampleScenes\Python
 	Type:
 		conda env create -f environments.yml
+	To allow octave functions call from python scripts:
+		conda install -c conda-forge oct2py
 		
 To launch the driving car controled with python script:
-
-	To activate python env cariables:
+	Activate python env cariables (only once per session):
 		activate ADAS_Tester
 
-	To launch the python script:
-		ADAS_Tester\Assets\SampleScenes\Python
+	To launch ADAS algo in python from the python script:
+		In ADAS_Tester\Assets\SampleScenes\Python
 	Type:
-		python drive.py
+		python drivePython.py
 		
+	To launch ADAS algo in octave from the python script:
+		In ADAS_Tester\Assets\SampleScenes\Python
+	Type:
+		python driveOctave.py
 		
 	
