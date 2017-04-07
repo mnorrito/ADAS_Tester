@@ -23,6 +23,9 @@ INSTALLATION GUIDE
 		conda env create -f environments.yml
 	To allow octave functions call from python scripts:
 		conda install -c conda-forge oct2py
+
+- Add Octave path in the PATH environement variable
+	set PATH=[PathToOCtave];%PATH%
 		
 To launch the driving car controled with python script:
 	Activate python env cariables (only once per session):

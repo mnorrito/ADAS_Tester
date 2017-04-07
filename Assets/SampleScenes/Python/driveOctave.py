@@ -5,7 +5,7 @@ from oct2py import octave
 #import argparse
 import base64
 #from datetime import datetime
-#import os
+import os
 #import shutil
 
 #import numpy as np
@@ -18,8 +18,8 @@ from io import BytesIO
 
 #from keras.models import load_model
 #import utils
-
-#octave.addpath("C:/Users/mnorrito/MyFolder/Juliette/ADAS/Unity/ADAS_Tester/Assets/SampleScenes/Python")
+cwd = os.getcwd()
+octave.addpath(cwd)
 
 sio = socketio.Server()
 app = Flask(__name__)
