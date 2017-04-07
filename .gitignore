@@ -1,4 +1,12 @@
-## 
-*.meta
-*.bin
-Library/metadata/*
+# Unity generated
+Builds/
+Temp/
+Library/
+obj/
+
+# Visual Studio / MonoDevelop generated
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.userprefs
