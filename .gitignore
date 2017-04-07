@@ -4,6 +4,8 @@ Temp/
 Library/
 obj/
 
+ProjectSettings/*.txt
+
 # Visual Studio / MonoDevelop generated
 *.csproj
 *.unityproj
