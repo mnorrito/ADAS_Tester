@@ -3,6 +3,7 @@ Builds/
 Temp/
 Library/
 obj/
+*.orig*
 
 ProjectSettings/*.txt
 
