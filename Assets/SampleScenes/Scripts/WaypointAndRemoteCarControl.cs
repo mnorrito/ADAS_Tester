@@ -1,12 +1,11 @@
-﻿using System;
+﻿using UnityEngine.EventSystems;
+using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 using UnityEngine.UI;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using UnityEngine;
 
 namespace UnityStandardAssets.Vehicles.Car
 {
@@ -22,6 +21,7 @@ namespace UnityStandardAssets.Vehicles.Car
         public float Acceleration { get; set; }
         public float Pedestrian { get; set; }
 
+		
         public enum BrakeCondition
         {
             NeverBrake,                 // the car simply accelerates at full throttle all the time.
@@ -82,8 +82,6 @@ namespace UnityStandardAssets.Vehicles.Car
         private float distanceToWalker;
 
 
-
-
         private void Awake()
         {
             // get the car controller reference
@@ -96,11 +94,10 @@ namespace UnityStandardAssets.Vehicles.Car
 
             warningText.text = "";
             debugText.text = "";
-
         }
 
 
-    private void FixedUpdate()
+		private void FixedUpdate()
         {
 
             if (m_Target == null || !m_Driving)
