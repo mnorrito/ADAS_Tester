@@ -12,10 +12,12 @@ namespace UnityStandardAssets.Vehicles.Car
     [RequireComponent(typeof(CarController))]
     public class WaypointAndRemoteCarControl : MonoBehaviour
     {
-        public GameObject Walker1;
-        public Text distanceToWalkerText;
-        public Text warningText;
-        public Text debugText;
+        private GameObject Walker1;
+        private Text distanceToWalkerText;
+        private Text warningText;
+        private Text debugText;
+
+        
 
         public float SteeringAngle { get; set; }
         public float Acceleration { get; set; }
@@ -35,7 +37,7 @@ namespace UnityStandardAssets.Vehicles.Car
 
         // "wandering" is used to give the cars a more human, less robotic feel. They can waver slightly
         // in speed and direction while driving towards their target.
-
+        private Boolean standaloneMode;
         [SerializeField]
         [Range(0, 1)]
         private float m_CautiousSpeedFactor = 0.05f;               // percentage of max speed to use when being maximally cautious
@@ -84,6 +86,9 @@ namespace UnityStandardAssets.Vehicles.Car
 
         private void Awake()
         {
+            
+            standaloneMode = GameObject.Find("Parameters").GetComponent<Parameters>().standalone;
+            Walker1 = GameObject.Find("Parameters").GetComponent<Parameters_Car>().Walker1;
             // get the car controller reference
             m_CarController = GetComponent<CarController>();
 
@@ -91,7 +96,9 @@ namespace UnityStandardAssets.Vehicles.Car
             m_RandomPerlin = Random.value * 100;
 
             m_Rigidbody = GetComponent<Rigidbody>();
-
+            warningText = GameObject.Find("Parameters").GetComponent<Parameters>().warningText;
+            debugText = GameObject.Find("Parameters").GetComponent<Parameters>().debugText;
+            distanceToWalkerText = GameObject.Find("Parameters").GetComponent<Parameters>().distanceToWalkerText;
             warningText.text = "";
             debugText.text = "";
         }
@@ -211,39 +218,72 @@ namespace UnityStandardAssets.Vehicles.Car
                 float handBreak = 0;
 
 
-
-                if (Pedestrian == 1.0)
+                if (standaloneMode == true)
                 {
-                    warningText.text = "Pedestrian detected !!";
+                    Boolean pedestrianDetected = false;
+                    if (Walker1 != null)
+                    { 
+                        pedestrianDetected = PedestrianDetected();
+                    }
+                    if (pedestrianDetected == false)
+                    {
+ 
+                        // feed input to the car controller.
+                        m_CarController.Move(steer, accel, accel, 0f);
+        
+                    }
+                    else
+                    {
+                        warningText.text = "Pedestrian detected => BREAKING !!!!";
+                        // feed input to the car controller.
+
+
+                        if (m_Rigidbody.velocity.magnitude > 0.1)
+                        {
+                            m_CarController.Move(steer, -1, -1, 0f);
+                        }
+                        else
+                        {
+                            m_CarController.Move(steer, 0, 0, 1);
+                        }
+                    }
                 }
                 else
                 {
-                    warningText.text = "Horizon free !!";
-                }
+                    if (Pedestrian == 1.0)
+                    {
+                        warningText.text = "Pedestrian detected !!";
+                    }
+                    else
+                    {
+                        warningText.text = "Horizon free !!";
+                    }
 
-                if ((Acceleration == 0) && (Pedestrian == 1.0))
-                {
-                    debugText.text = "Hand Break";
-                    handBreak = 1;
-                }
-                else
-                {
-                    if (Acceleration > 0)
-                    {
-                        debugText.text = "Accelerating";
-                    }
-                    if (Acceleration < 0)
-                    {
-                        debugText.text = "Breaking";
-                    }
-                    if (Acceleration == 0)
+                    if ((Acceleration == 0) && (Pedestrian == 1.0))
                     {
                         debugText.text = "Hand Break";
+                        handBreak = 1;
                     }
+                    else
+                    {
+                        if (Acceleration > 0)
+                        {
+                            debugText.text = "Accelerating";
+                        }
+                        if (Acceleration < 0)
+                        {
+                            debugText.text = "Breaking";
+                        }
+                        if (Acceleration == 0)
+                        {
+                            debugText.text = "Hand Break";
+                        }
+                    }
+
+
+                    m_CarController.Move(steer, Acceleration, Acceleration, handBreak);
                 }
-
-
-                m_CarController.Move(steer, Acceleration, Acceleration, handBreak);
+                
 
                 // if appropriate, stop driving when we're close enough to the target.
                 if (m_StopWhenTargetReached && localTarget.magnitude < m_ReachTargetThreshold)
@@ -293,7 +333,17 @@ namespace UnityStandardAssets.Vehicles.Car
             m_Target = target;
             m_Driving = true;
         }
+        public Boolean PedestrianDetected()
+        {
+            distanceToWalker = (Walker1.transform.position - transform.position).magnitude;
+            distanceToWalkerText.text = "Distance to walker = " + distanceToWalker.ToString();
 
+            if (distanceToWalker < 41)
+            {
+                return true;
+            }
+            return false;
+        }
 
 
     }

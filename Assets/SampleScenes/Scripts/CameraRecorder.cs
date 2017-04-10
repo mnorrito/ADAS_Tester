@@ -9,19 +9,30 @@ public class CameraRecorder : MonoBehaviour {
     private Camera OnBoardCamera;
     private string m_saveLocation = "";
 
-    public bool enableRecording;
-    public string outputFolder;
-    public const string scenarioDir = "ADAS_Tester_Scenario";
+    private bool enableRecording;
+    private string tracePath;
     public const string camOutDir = "CAMERA_OUTPUT";
+    private bool firstFrame = true;
 
     void Start () {
-        OpenFolder(outputFolder);
-        print("Open Folder" + outputFolder);
+        initialize();
+        
+    }
+
+    private void initialize()
+    {
+        enableRecording = GameObject.Find("Parameters").GetComponent<Parameters>().enableRecording;
+        
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (firstFrame)
+        {
+            initializeOnFirstFrame();
+            firstFrame = false;
+        }
         string timeStamp = System.DateTime.Now.ToString("HH_mm_ss_fff");
         if (enableRecording == true) { 
         WriteImage(OnBoardCamera, "OnBoardCamera", timeStamp);
@@ -31,13 +42,16 @@ public class CameraRecorder : MonoBehaviour {
     private void OpenFolder(string location)
     {
         m_saveLocation = location;
-        string timeStamp = System.DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss_fff");
-        m_saveLocation = Path.Combine(m_saveLocation, scenarioDir + "_" + timeStamp);
         print(m_saveLocation);
         Directory.CreateDirectory(m_saveLocation);
         Directory.CreateDirectory(Path.Combine(m_saveLocation, camOutDir));
     }
-
+    private void initializeOnFirstFrame()
+    {
+        tracePath = GameObject.Find("Parameters").GetComponent<Parameters>().getTraceFolder();
+        OpenFolder(tracePath);
+        //print("Open Folder" + tracePath);
+    }
     private void WriteImage(Camera camera, string prepend, string timestamp)
     {
         //needed to force camera update 

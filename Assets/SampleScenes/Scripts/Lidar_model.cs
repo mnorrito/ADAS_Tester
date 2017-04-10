@@ -2,21 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.IO;
 
 public class Lidar_model : MonoBehaviour
 {
-    public bool Velodyne_HDL_64E;
-    public int numberOfChannel;
-    public float[] fieldOfViewVertical;
-    public float angularResolutionVertical;
-    public float[] fieldOfViewHorizontal;
-    public float angularResolutionHorizontal;
-    public float measurementRange;
-    public float accuracy;
-    public string outputPath;
-    public bool showRay;
-    public bool printDebug;
-    //rivate
+    private Parameters_Lidar parameterLidarScript;
+    private bool lidarEnable;
+    private bool Velodyne_HDL_64E;
+    private int numberOfChannel;
+    private float[] fieldOfViewVertical;
+    private float angularResolutionVertical;
+    private float[] fieldOfViewHorizontal;
+    private float angularResolutionHorizontal;
+    private float measurementRange;
+    private float accuracy;
+    private string tracePath;
+    private string lidarTracePath;
+    private bool showRay;
+    private bool printDebug;
     private GameObject headGameObject;
     private bool useRayCast = true;
     private string[] lines;
@@ -25,20 +28,27 @@ public class Lidar_model : MonoBehaviour
     private int numberOfRayHorizontal;
     private float fieldOfViewTotalHorizontal;
     private bool enableMovementFromKeyboard = false;
+    public const string LidarDir = "LIDAR_OUTPUT";
+    private bool firstFrame = true;
+
 
 
     // Use this for initialization
     void Start()
     {
-        if (printDebug)
-        { 
-            Debug.Log("[Lidar_model][Start][1]");
+        parameterLidarScript = GameObject.Find("Parameters").GetComponent<Parameters_Lidar>();
+        lidarEnable = parameterLidarScript.lidarEnable;
+        Debug.Log("[Lidar_model][Start][1]");
+        if (lidarEnable)
+        {
+            initialize();
         }
-        initialize();
     }
 
     private void initialize()
     {
+
+        initializeLidarParameters();
         //Initialization of variable
         if (Velodyne_HDL_64E == true)
         {
@@ -64,6 +74,22 @@ public class Lidar_model : MonoBehaviour
             printLidarParameters();
         }
     }
+
+    private void initializeLidarParameters()
+    {
+
+        Velodyne_HDL_64E = parameterLidarScript.Velodyne_HDL_64E;
+        numberOfChannel = parameterLidarScript.numberOfChannel;
+        fieldOfViewVertical = parameterLidarScript.fieldOfViewVertical;
+        angularResolutionVertical = parameterLidarScript.angularResolutionVertical;
+        fieldOfViewHorizontal = parameterLidarScript.fieldOfViewHorizontal;
+        angularResolutionHorizontal = parameterLidarScript.angularResolutionHorizontal;
+        measurementRange = parameterLidarScript.measurementRange;
+        accuracy = parameterLidarScript.accuracy;
+        showRay = parameterLidarScript.showRay;
+        printDebug = parameterLidarScript.printDebug;
+    }
+
     private void loadLidarModel(string lidarModel)
     {
         if (lidarModel == "Velodyne_HDL-64E")
@@ -87,6 +113,16 @@ public class Lidar_model : MonoBehaviour
     private float angleHorizontalToAngleVertical(float angle)
     {
         return ((float)90 - (angle));
+    }
+
+    private void initializeOnFirstFrame()
+    {
+        Debug.Log("[Lidar_model][initializeOnFirstFrame][1]");
+        tracePath = GameObject.Find("Parameters").GetComponent<Parameters>().getTraceFolder();
+        Debug.Log("[Lidar_model][initializeOnFirstFrame][1] tracePath=" + tracePath);
+        lidarTracePath = Path.Combine(tracePath, LidarDir);
+        Debug.Log("[Lidar_model][initializeOnFirstFrame][1] lidarTracePath=" + lidarTracePath);
+        Directory.CreateDirectory(lidarTracePath);
     }
 
     private void createRayCast()
@@ -133,7 +169,7 @@ public class Lidar_model : MonoBehaviour
                             //All the points here are in the referencial of the scene. It should be the referencial of the lidar
                             point = Quaternion.Inverse(headGameObject.transform.rotation) * point;
                             //Rotate again in order to have x in from of the Lidar
-                            point = Quaternion.Euler(0, 90, 0)*point;
+                            point = Quaternion.Euler(0, 90, 0) * point;
                             if (showRay)
                             {
                                 Debug.DrawLine(positionLidar, hit.point);
@@ -162,33 +198,81 @@ public class Lidar_model : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-    }
-
-    void FixedUpdate()
-    {
-
-        if (useRayCast)
+        if (lidarEnable)
         {
-            lineIterator = 0;
-            createRayCast();
+            if (firstFrame)
+            {
+                initializeOnFirstFrame();
+                firstFrame = false;
+            }
+            if (useRayCast)
+            {
+                lineIterator = 0;
+                createRayCast();
+            }
+            if (enableMovementFromKeyboard)
+            {
+                //Function called right after the Frame is finished        
+                float moveHorizontal = Input.GetAxis("Horizontal");
+                float moveVertical = Input.GetAxis("Vertical");
+                Vector3 movement = new Vector3(moveHorizontal * 10, 0.0f, -moveVertical * 10);
+                Transform transform = GetComponent<Transform>();
+                transform.position += movement;
+            }
+            writeFile(Time.frameCount);
         }
-        if (enableMovementFromKeyboard)
-        {
-            //Function called right after the Frame is finished        
-            float moveHorizontal = Input.GetAxis("Horizontal");
-            float moveVertical = Input.GetAxis("Vertical");
-            Vector3 movement = new Vector3(moveHorizontal * 10, 0.0f, -moveVertical * 10);
-            Transform transform = GetComponent<Transform>();
-            transform.position += movement;
-        }
-        writeFile(Time.frameCount);
     }
 
     void writeFile(int frame)
     {
-        string outputFile = outputPath + frame.ToString().PadLeft(10,'0')+".txt";
+        string outputFile = lidarTracePath +"\\"+ frame.ToString().PadLeft(10, '0') + ".txt";
         //Debug.Log("[Lidar_model][writeFile] frameCount=" + Time.frameCount + " Writing lines to output file:" + outputFile);
         System.IO.File.WriteAllLines(outputFile, lines);
     }
+
+    public void setVelodyne_HDL_64E(Boolean a)
+    {
+        Velodyne_HDL_64E = a;
+    }
+    public void setNumberOfChannel(int a)
+    {
+        this.numberOfChannel = a;
+    }
+    public void setFieldOfViewVertical(float[] a)
+    {
+        fieldOfViewVertical = a;
+    }
+    public void setAngularResolutionVertical(float a)
+    {
+        angularResolutionVertical = a;
+    }
+    public void setFieldOfViewHorizontal(float[] a)
+    {
+        fieldOfViewHorizontal = a;
+    }
+    public void setAngularResolutionHorizontal(float a)
+    {
+        angularResolutionHorizontal = a;
+    }
+    public void setMeasurementRange(float a)
+    {
+        measurementRange = a;
+    }
+    public void setAccuracy(float a)
+    {
+        accuracy = a;
+    }
+    public void setOutputPath(string a)
+    {
+        tracePath = a;
+    }
+    public void setShowRay(bool a)
+    {
+        showRay = a;
+    }
+    public void setPrintDebug(bool a)
+    {
+        printDebug = a;
+    }
+
 }
