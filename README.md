@@ -29,12 +29,12 @@ INSTALLATION GUIDE
 		
 
 USER'S GUIDE
-	To launch the driving car controled with python script:
-		- Activate python env variables (only once per session): activate ADAS_Tester
-		- Set ADAS_ALGO_SRC in 'ADAS_Tester\Assets\SampleScenes\Python\drive.py' by uncommenting the desired line
-		- python drivePython.py
+- To launch the driving car controled with python script:
+	- Activate python env variables (only once per session): activate ADAS_Tester
+	- Set ADAS_ALGO_SRC in 'ADAS_Tester\Assets\SampleScenes\Python\drive.py' by uncommenting the desired line
+	- Launch python script => python commandServer.py
 		
-	To launch the driving car in autonomous mode, select 'Standalone' in Unity UI (Parameters->Parameters_Car)
+- To launch the driving car in autonomous mode, select 'Standalone' in Unity UI (Parameters->Parameters_Car)
 
 
 	

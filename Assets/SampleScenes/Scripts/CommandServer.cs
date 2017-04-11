@@ -86,7 +86,6 @@ public class CommandServer : MonoBehaviour
     {
         UnityMainThreadDispatcher.Instance().Enqueue(() =>
         {
-            print("Sending telemetry...");
             Dictionary<string, string> data = new Dictionary<string, string>();
 
             int msgSize = 4;
@@ -107,7 +106,6 @@ public class CommandServer : MonoBehaviour
     {
         UnityMainThreadDispatcher.Instance().Enqueue(() =>
         {
-            print("Sending camera image...");
                 // Collect Data from the Car
                 Dictionary<string, string> data = new Dictionary<string, string>();
 
