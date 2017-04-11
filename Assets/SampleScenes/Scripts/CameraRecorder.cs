@@ -42,7 +42,7 @@ public class CameraRecorder : MonoBehaviour {
     private void OpenFolder(string location)
     {
         m_saveLocation = location;
-        print(m_saveLocation);
+        //print(m_saveLocation);
         Directory.CreateDirectory(m_saveLocation);
         Directory.CreateDirectory(Path.Combine(m_saveLocation, camOutDir));
     }

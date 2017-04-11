@@ -9,39 +9,53 @@ using System.Security.AccessControl;
 
 public class CommandServer : MonoBehaviour
 {
-    public WaypointAndRemoteCarControl WaypointAndRemoteCarControl;
+    private WaypointAndRemoteCarControl WaypointAndRemoteCarControl;
     //public CarRemoteControl CarRemoteControl;
-	public Camera CarCamera;
-    public GameObject Walker1;
-    public GameObject Car;
+    private Camera CarCamera;
+    private GameObject Walker1;
+    private GameObject Car;
 
 
     private SocketIOComponent _socket;
-	private CarController _carController;
+    private CarController _carController;
 
-	// Use this for initialization
-	void Start()
-	{
-		_socket = GameObject.Find("SocketIO").GetComponent<SocketIOComponent>();
+    // Use this for initialization
+    void Start()
+    {
+        Car = GameObject.Find("Parameters").GetComponent<Parameters>().adasCarGameObject;
+        Walker1 = GameObject.Find("Parameters").GetComponent<Parameters_Car>().Walker1;
+        WaypointAndRemoteCarControl = GameObject.Find("Parameters").GetComponent<Parameters>().adasCarGameObject.GetComponent<WaypointAndRemoteCarControl>();
+        for (int i = 0; i < Car.transform.childCount; i++)
+        {
+            GameObject gameObject = Car.transform.GetChild(i).gameObject;
+            if (gameObject != null)
+            {
+                if (gameObject.name == "OnBoardCamera")
+                {
+                    CarCamera = gameObject.GetComponent<Camera>();
+                }
+            }
+        }
+        _socket = GameObject.Find("SocketIO").GetComponent<SocketIOComponent>();
         _socket.On("toUnityMsg", OnToUnityMsg);
         _carController = WaypointAndRemoteCarControl.GetComponent<CarController>();
     }
+    // Update is called once per frame
+    void Update()
 
-	// Update is called once per frame
-	void Update()
-	{
-	}
+    {
+    }
 
     void OnToUnityMsg(SocketIOEvent obj)
     {
         JSONObject jsonObject = obj.data;
         string messageHeader = jsonObject.GetField("messageHeader").str;
 
-        if(messageHeader.Equals("driveInfo"))
+        if (messageHeader.Equals("driveInfo"))
         {
             driveInfoReceived(obj);
         }
-        if(messageHeader.Equals("emptyInfo"))
+        if (messageHeader.Equals("emptyInfo"))
         {
             emptyInfoReceived(obj);
         }

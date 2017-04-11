@@ -38,7 +38,6 @@ public class Lidar_model : MonoBehaviour
     {
         parameterLidarScript = GameObject.Find("Parameters").GetComponent<Parameters_Lidar>();
         lidarEnable = parameterLidarScript.lidarEnable;
-        Debug.Log("[Lidar_model][Start][1]");
         if (lidarEnable)
         {
             initialize();
@@ -117,11 +116,8 @@ public class Lidar_model : MonoBehaviour
 
     private void initializeOnFirstFrame()
     {
-        Debug.Log("[Lidar_model][initializeOnFirstFrame][1]");
         tracePath = GameObject.Find("Parameters").GetComponent<Parameters>().getTraceFolder();
-        Debug.Log("[Lidar_model][initializeOnFirstFrame][1] tracePath=" + tracePath);
         lidarTracePath = Path.Combine(tracePath, LidarDir);
-        Debug.Log("[Lidar_model][initializeOnFirstFrame][1] lidarTracePath=" + lidarTracePath);
         Directory.CreateDirectory(lidarTracePath);
     }
 
