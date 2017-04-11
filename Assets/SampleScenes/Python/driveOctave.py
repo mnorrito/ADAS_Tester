@@ -31,20 +31,27 @@ MIN_SPEED = 10
 
 speed_limit = MAX_SPEED
 
-
-
-@sio.on('telemetry')
-def telemetry(sid, data):
+@sio.on('toExtMsg')
+def toExtMsg(sid, data):
     if data:
-        # The current steering angle of the car
-        steering_angle = float(data["steering_angle"])
-        # The current throttle of the car
-        throttle = float(data["throttle"])
-        # The current speed of the car
-        speed = float(data["speed"])
-        # The current image from the center camera of the car
-        image = Image.open(BytesIO(base64.b64decode(data["image"])))
-        distanceToWalker = float(data["distanceToWalker"])
+        msgHeader = data["messageHeader"]
+        msgSize = data["messageSize"]
+        
+        if (msgHeader == "telemetry"):
+            receivedTelemetry(data)
+        
+        if (msgHeader == "cameraImg"):
+            receivedCameraImg(data)
+            
+    else:
+        sendEmptyInfo()
+        
+def receivedTelemetry(data):        
+    if data:
+        steering_angle = float(data["0"])
+        throttle = float(data["1"])
+        speed = float(data["2"])
+        distanceToWalker = float(data["3"])
         pedestrian = 0
         
         try:
@@ -55,41 +62,47 @@ def telemetry(sid, data):
                 speed_limit = MAX_SPEED
             #throttle = 1.0 - steering_angle**2 - (speed/speed_limit)**2
             throttle = 1.0 - (speed/speed_limit)**2
-            
             throttle = octave.detect_pedestrian(distanceToWalker, throttle, speed)
-            #throttle = octave.getThrottle(distanceToWalker, throttle, speed)
-            #pedestrian = octave.getPedestrian(distanceToWalker, throttle, speed)
-            
-            #eng.detect_pedestrian(distanceToWalker, throttle, speed)
-            
+
             print('{} {} {} {}'.format(steering_angle, throttle, speed, pedestrian))
-            send_control(steering_angle, throttle, pedestrian)
+            sendDriveInfo(steering_angle, throttle, pedestrian)
         except Exception as e:
             print(e)
 
-
-    else:
-        # NOTE: DON'T EDIT THIS.
-        sio.emit('manual', data={}, skip_sid=True)
-
+def sendDriveInfo(steering_angle, throttle, pedestrian):
+    msgHeader = "driveInfo"
+    msgSize = 3
+    sio.emit(
+        "toUnityMsg",
+        data={
+            'messageHeader': msgHeader.__str__(),
+            'messageSize': msgSize.__str__(),
+            '0': steering_angle.__str__(),
+            '1': throttle.__str__(),
+            '2': pedestrian.__str__()
+        },
+        skip_sid=True)
+            
+def sendEmptyInfo():
+    msgHeader = "emptyInfo"
+    msgSize = 0
+    sio.emit(
+        "toUnityMsg",
+        data={
+            'messageHeader': msgHeader.__str__(),
+            'messageSize': msgSize.__str__(),
+        },
+        skip_sid=True)
+                        
+def receivedCameraImg(data):
+    msgHeader = "driveInfo"
+    msgSize = 3
+	#image = Image.open(BytesIO(base64.b64decode(data["image"])))
 
 @sio.on('connect')
 def connect(sid, environ):
     print("connect ", sid)
-    send_control(0, 0, 0)
-    #eng = matlab.engine.start_matlab()
-
-def send_control(steering_angle, throttle, pedestrian):
-    print("sending control ", steering_angle, throttle, pedestrian)
-    sio.emit(
-        "steer",
-        data={
-            'steering_angle': steering_angle.__str__(),
-            'throttle': throttle.__str__(),
-            'pedestrian': pedestrian.__str__()
-        },
-        skip_sid=True)
-
+    sendDriveInfo(0, 0, 0)
 
 if __name__ == '__main__':
     # wrap Flask application with engineio's middleware
