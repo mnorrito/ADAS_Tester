@@ -86,8 +86,7 @@ namespace UnityStandardAssets.Vehicles.Car
 
         private void Awake()
         {
-            
-            standaloneMode = GameObject.Find("Parameters").GetComponent<Parameters>().standalone;
+            standaloneMode = GameObject.Find("Parameters").GetComponent<Parameters_Car>().standalone;
             Walker1 = GameObject.Find("Parameters").GetComponent<Parameters_Car>().Walker1;
             // get the car controller reference
             m_CarController = GetComponent<CarController>();
@@ -338,7 +337,7 @@ namespace UnityStandardAssets.Vehicles.Car
             distanceToWalker = (Walker1.transform.position - transform.position).magnitude;
             distanceToWalkerText.text = "Distance to walker = " + distanceToWalker.ToString();
 
-            if (distanceToWalker < 41)
+            if (distanceToWalker < 17)
             {
                 return true;
             }

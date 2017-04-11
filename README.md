@@ -27,18 +27,14 @@ INSTALLATION GUIDE
 - Add Octave path in the PATH environement variable
 	set PATH=[PathToOCtave];%PATH%
 		
-To launch the driving car controled with python script:
-	Activate python env cariables (only once per session):
-		activate ADAS_Tester
 
-	To launch ADAS algo in python from the python script:
-		In ADAS_Tester\Assets\SampleScenes\Python
-	Type:
-		python drivePython.py
+USER'S GUIDE
+	To launch the driving car controled with python script:
+		- Activate python env variables (only once per session): activate ADAS_Tester
+		- Set ADAS_ALGO_SRC in 'ADAS_Tester\Assets\SampleScenes\Python\drive.py' by uncommenting the desired line
+		- python drivePython.py
 		
-	To launch ADAS algo in octave from the python script:
-		In ADAS_Tester\Assets\SampleScenes\Python
-	Type:
-		python driveOctave.py
-		
+	To launch the driving car in autonomous mode, select 'Standalone' in Unity UI (Parameters->Parameters_Car)
+
+
 	

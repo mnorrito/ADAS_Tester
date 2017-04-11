@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Parameters_Car : MonoBehaviour {
-    public bool driving;
+    public bool standalone;
+
     public GameObject Walker1;
     // Use this for initialization
     void Start () {

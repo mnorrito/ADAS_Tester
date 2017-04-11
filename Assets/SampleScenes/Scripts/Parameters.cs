@@ -5,7 +5,6 @@ using UnityEngine.UI;
 using System.IO;
 
 public class Parameters : MonoBehaviour {
-    public bool standalone;
     public string tracePath;
     public bool enableRecording;
     public GameObject adasCarGameObject;
