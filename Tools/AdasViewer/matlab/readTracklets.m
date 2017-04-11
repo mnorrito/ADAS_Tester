@@ -4,18 +4,18 @@ filename
 
 %% read Document Object Model (DOM)
 
-   if isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
-        fprintf('Octave Detected \n');
-        parser = javaObject('org.apache.xerces.parsers.DOMParser');
-        parser.parse(filename); % it seems that cd in octave are taken into account
-        dom = parser.getDocument;
-   else
+%   if isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
+%        fprintf('Octave Detected \n');
+%        parser = javaObject('org.apache.xerces.parsers.DOMParser');
+%        parser.parse(filename); % it seems that cd in octave are taken into account
+%        dom = parser.getDocument;
+%   else
    try
    dom = xmlread(filename); % document node (the complete tree)
    catch
    error('Failed to read XML file %s.',filename);
    end
-   end
+%   end
 
 %% Extract tracklets
 allTracklets     = dom.getElementsByTagName('tracklets'); % DeepNodeList
