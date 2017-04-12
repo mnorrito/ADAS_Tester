@@ -8,13 +8,16 @@ public class CameraRecorder : MonoBehaviour {
     [SerializeField]
     private Camera OnBoardCamera;
     private string m_saveLocation = "";
-
+    private Parameters parameterScript;
     private bool recordingEnable;
     private string tracePath;
     public const string camOutDir = "CAMERA_OUTPUT";
     private bool firstFrame = true;
+    private int frameRate;
+    private int framePerSecond = 24;
 
     void Start () {
+        parameterScript = GameObject.Find("Parameters").GetComponent<Parameters>();
         initialize();
         
     }
@@ -22,7 +25,7 @@ public class CameraRecorder : MonoBehaviour {
     private void initialize()
     {
         recordingEnable = GameObject.Find("Parameters").GetComponent<Parameters_Car>().recordingEnable;
-
+        frameRate = parameterScript.getFrameRate();
     }
 
     // Update is called once per frame
@@ -33,17 +36,18 @@ public class CameraRecorder : MonoBehaviour {
             initializeOnFirstFrame();
             firstFrame = false;
         }
-        string timeStamp = System.DateTime.Now.ToString("HH_mm_ss_fff");
-
-        if (recordingEnable == true) { 
-        WriteImage(OnBoardCamera, Time.frameCount.ToString().PadLeft(10, '0'));
+        parameterScript.log("[CameraRecorder][FixedUpdate] Application.frameRate=" + Application.targetFrameRate + " QualitySettings.vSyncCount=" + QualitySettings.vSyncCount + " Time.captureFramerate=" + Time.captureFramerate + " Time.fixedDeltaTime=" + Time.fixedDeltaTime + " Time.deltaTime=" + Time.deltaTime, 2);
+        if (recordingEnable == true && isFrameCameraFrame(Time.frameCount)) {
+            int s = (int)(Time.time);
+            int ms = (int)((Time.time - (float)s) * ((float)1000));
+            string name = s.ToString().PadLeft(4, '0') + "s_" + ms.ToString().PadLeft(4, '0') + "ms";
+            WriteImage(OnBoardCamera, name);
         }
     }
 
     private void OpenFolder(string location)
     {
         m_saveLocation = location;
-        //print(m_saveLocation);
         Directory.CreateDirectory(m_saveLocation);
         Directory.CreateDirectory(Path.Combine(m_saveLocation, camOutDir));
     }
@@ -51,7 +55,7 @@ public class CameraRecorder : MonoBehaviour {
     {
         tracePath = GameObject.Find("Parameters").GetComponent<Parameters>().getTraceFolder();
         OpenFolder(tracePath);
-        //print("Open Folder" + tracePath);
+        parameterScript.log("[CameraRecorder][initializeOnFirstFrame] Open Folder=" + tracePath, 2);
     }
     private void WriteImage(Camera camera,  string timestamp)
     {
@@ -68,5 +72,17 @@ public class CameraRecorder : MonoBehaviour {
         string path = Path.Combine(directory,   timestamp + ".jpg");
         File.WriteAllBytes(path, image);
         image = null;
+    }
+
+    private bool isFrameCameraFrame(int frame)
+    {
+        bool isFrameCameraFrame = false;
+        
+        if (frame % (frameRate / framePerSecond) == 0)
+        {
+            isFrameCameraFrame = true;
+        }
+        parameterScript.log("[CameraRecorder][isFrameCameraFrame] frame=" + frame + " isFrameCameraFrame=" + isFrameCameraFrame + " framePerSecond=" + framePerSecond, 3);
+        return isFrameCameraFrame;
     }
 }

@@ -9,8 +9,8 @@ public class Parameters_Car : MonoBehaviour {
     public GameObject Walker1;
     // Use this for initialization
     void Start () {
-		
-	}
+        
+    }
 	
 	// Update is called once per frame
 	void Update () {

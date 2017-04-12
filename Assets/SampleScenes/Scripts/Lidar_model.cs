@@ -7,9 +7,12 @@ using System.IO;
 public class Lidar_model : MonoBehaviour
 {
     private Parameters_Lidar parameterLidarScript;
+    private Parameters parameterScript;
     private CommandServer commandServerScript;
     private bool lidarEnable;
     private bool Velodyne_HDL_64E;
+    public bool Velodyne_HDL_64EDualMode;
+    private int rotationRateHz;
     private int numberOfChannel;
     private float[] fieldOfViewVertical;
     private float angularResolutionVertical;
@@ -20,7 +23,6 @@ public class Lidar_model : MonoBehaviour
     private string tracePath;
     private string lidarTracePath;
     private bool showRay;
-    private bool printDebug;
     private GameObject headGameObject;
     private bool useRayCast = true;
     private string[] lines;
@@ -29,17 +31,22 @@ public class Lidar_model : MonoBehaviour
     private int numberOfRayVertical;
     private int numberOfRayHorizontal;
     private float fieldOfViewTotalHorizontal;
-    private bool enableMovementFromKeyboard = false;
+    //private int lastRecordedFrame;
     public const string LidarDir = "LIDAR_OUTPUT";
     private bool firstFrame = true;
     private bool recordingEnable;
-
+    private int frameRate;
+    private static int numberOfPointsPerSec_SingleMode = 1300000;
+    private static int numberOfPointsPerSec_DualMode = 2200000;
 
     // Use this for initialization
     void Start()
     {
-        recordingEnable = GameObject.Find("Parameters").GetComponent<Parameters_Lidar>().recordingEnable;
+        parameterScript = GameObject.Find("Parameters").GetComponent<Parameters>();
         parameterLidarScript = GameObject.Find("Parameters").GetComponent<Parameters_Lidar>();
+        recordingEnable = parameterLidarScript.recordingEnable;
+        //lastRecordedFrame = -1;
+
         lidarEnable = parameterLidarScript.lidarEnable;
         if (lidarEnable)
         {
@@ -50,68 +57,76 @@ public class Lidar_model : MonoBehaviour
 
     private void initialize()
     {
-
-        initializeLidarParameters();
-        //Initialization of variable
-        if (Velodyne_HDL_64E == true)
+        for (int i = 0; i < this.transform.childCount; i++)
         {
-            loadLidarModel("Velodyne_HDL-64E");
-        }
-        int i = 0;
-        headGameObject = new GameObject();
-        while (headGameObject.name != "Head")
-        {
-            headGameObject = this.transform.GetChild(i).gameObject;
-            if (printDebug)
+            GameObject gameObject = this.transform.GetChild(i).gameObject;
+            if (gameObject != null)
             {
-                Debug.Log("[Lidar_model][initialize][1] laserGameObject found at index=" + i);
+                if (gameObject.name == "Head")
+                {
+                    headGameObject = gameObject;
+                    parameterScript.log("[Lidar_model][initialize][1] laserGameObject found at index=" + i, 2);
+                    break;
+                }
             }
-            i++;
-        }
-        numberOfRayVertical = numberOfChannel;
-        fieldOfViewTotalHorizontal = fieldOfViewHorizontal[1] - fieldOfViewHorizontal[0];
-        numberOfRayHorizontal = (int)(fieldOfViewTotalHorizontal / angularResolutionHorizontal);
-        lines = new string[numberOfRayVertical * numberOfRayHorizontal];
-        floatLines = new float[numberOfRayVertical * numberOfRayHorizontal * 4];
-        if (printDebug)
-        {
-            printLidarParameters();
         }
     }
 
     private void initializeLidarParameters()
     {
-
         Velodyne_HDL_64E = parameterLidarScript.Velodyne_HDL_64E;
-        numberOfChannel = parameterLidarScript.numberOfChannel;
-        fieldOfViewVertical = parameterLidarScript.fieldOfViewVertical;
-        angularResolutionVertical = parameterLidarScript.angularResolutionVertical;
-        fieldOfViewHorizontal = parameterLidarScript.fieldOfViewHorizontal;
-        angularResolutionHorizontal = parameterLidarScript.angularResolutionHorizontal;
-        measurementRange = parameterLidarScript.measurementRange;
-        accuracy = parameterLidarScript.accuracy;
-        showRay = parameterLidarScript.showRay;
-        printDebug = parameterLidarScript.printDebug;
-    }
-
-    private void loadLidarModel(string lidarModel)
-    {
-        if (lidarModel == "Velodyne_HDL-64E")
+        if(Velodyne_HDL_64E )
         {
+            rotationRateHz = parameterLidarScript.rotationRateHz;
             numberOfChannel = 64;
-            numberOfChannel = 1;
-            fieldOfViewVertical = new float[] { 2, (float)-24.9 };
+            fieldOfViewVertical = new float[] { 2, (float)-24.9 }; ;
             angularResolutionVertical = (float)0.4;
             fieldOfViewHorizontal = new float[] { 0, 360 };
-            angularResolutionHorizontal = (float)0.35;
+            Velodyne_HDL_64EDualMode = parameterLidarScript.Velodyne_HDL_64EDualMode;
+            fieldOfViewTotalHorizontal = fieldOfViewHorizontal[1] - fieldOfViewHorizontal[0];
+            //Compute angularResolutionHorizontal
+            angularResolutionHorizontal = computeAngularResolutionHorizontal_Velodyne_HDL_64E(Velodyne_HDL_64EDualMode, rotationRateHz, numberOfChannel, fieldOfViewTotalHorizontal);
             measurementRange = 120;
             accuracy = (float)0.02;
+            showRay = parameterLidarScript.showRay;
+            frameRate = parameterScript.getFrameRate();
         }
+        else
+        {
+            rotationRateHz = parameterLidarScript.rotationRateHz;
+            numberOfChannel = parameterLidarScript.numberOfChannel;
+            fieldOfViewVertical = parameterLidarScript.fieldOfViewVertical;
+            angularResolutionVertical = parameterLidarScript.angularResolutionVertical;
+            fieldOfViewHorizontal = parameterLidarScript.fieldOfViewHorizontal;
+            angularResolutionHorizontal = parameterLidarScript.angularResolutionHorizontal;
+            measurementRange = parameterLidarScript.measurementRange;
+            accuracy = parameterLidarScript.accuracy;
+            showRay = parameterLidarScript.showRay;
+            frameRate = parameterScript.getFrameRate();
+            fieldOfViewTotalHorizontal = fieldOfViewHorizontal[1] - fieldOfViewHorizontal[0];
+        }
+        numberOfRayVertical = numberOfChannel;        
+        numberOfRayHorizontal = (int)(fieldOfViewTotalHorizontal / angularResolutionHorizontal);
+        lines = new string[numberOfRayVertical * numberOfRayHorizontal];
+        floatLines = new float[numberOfRayVertical * numberOfRayHorizontal * 4];
+        
+        printLidarParameters();
+        
+    }
+
+    private float computeAngularResolutionHorizontal_Velodyne_HDL_64E(bool dualReturnModeEnabled,  int rotationRate, int verticalRayNumber, float fieldOfView)
+    {
+        int numberOfPointsPerSec = dualReturnModeEnabled ? numberOfPointsPerSec_DualMode : numberOfPointsPerSec_SingleMode;
+        int numberOfPointsPerRotation = numberOfPointsPerSec / rotationRate;
+        int numberOfHorizontalScan = numberOfPointsPerRotation / verticalRayNumber;
+        float angularResolution = ((float)fieldOfView) / ((float) numberOfHorizontalScan);
+        parameterScript.log("[Lidar_model][computeAngularResolutionHorizontal_Velodyne_HDL_64E] dualReturnModeEnabled=" + dualReturnModeEnabled + " rotationRate=" + rotationRate + " verticalRayNumber=" + verticalRayNumber + " fieldOfView=" + fieldOfView + " numberOfPointsPerSec=" + numberOfPointsPerSec + " numberOfPointsPerRotation=" + numberOfPointsPerRotation + " numberOfHorizontalScan=" + numberOfHorizontalScan + " angularResolution=" + angularResolution, 1);
+        return angularResolution;
     }
 
     private void printLidarParameters()
     {
-        Debug.Log("[Lidar_model][printLidarParameters] numberOfChannel=" + numberOfChannel + " numberOfRayHorizontal=" + numberOfRayHorizontal + " fieldOfViewVertical=[" + fieldOfViewVertical[0] + ";] angularResolutionVertical=" + angularResolutionVertical + " fieldOfViewHorizontal=[" + fieldOfViewHorizontal[0] + ";" + fieldOfViewHorizontal[1] + "] angularResolutionHorizontal=" + angularResolutionHorizontal + " measurementRange=" + measurementRange + " accuracy" + accuracy);
+        parameterScript.log("[Lidar_model][printLidarParameters] rotationRateHz=" + rotationRateHz + " frameRate=" + frameRate + " numberOfChannel=" + numberOfChannel + " numberOfRayHorizontal=" + numberOfRayHorizontal + " fieldOfViewVertical=[" + fieldOfViewVertical[0] + ";] angularResolutionVertical=" + angularResolutionVertical + " fieldOfViewHorizontal=[" + fieldOfViewHorizontal[0] + ";" + fieldOfViewHorizontal[1] + "] angularResolutionHorizontal=" + angularResolutionHorizontal + " measurementRange=" + measurementRange + " accuracy" + accuracy, 1);
     }
 
     private float angleHorizontalToAngleVertical(float angle)
@@ -121,7 +136,8 @@ public class Lidar_model : MonoBehaviour
 
     private void initializeOnFirstFrame()
     {
-        tracePath = GameObject.Find("Parameters").GetComponent<Parameters>().getTraceFolder();
+        initializeLidarParameters();
+        tracePath = parameterScript.getTraceFolder();
         lidarTracePath = Path.Combine(tracePath, LidarDir);
         Directory.CreateDirectory(lidarTracePath);
     }
@@ -139,25 +155,20 @@ public class Lidar_model : MonoBehaviour
             for (int verticalAngleIt = 0; verticalAngleIt < numberOfRayVertical; verticalAngleIt++)
             {
                 float verticalAngle = angleHorizontalToAngleVertical(fieldOfViewVertical[0] - verticalAngleIt * angularResolutionVertical);
-                //Debug.Log("[Lidar_model][createRays][2] fieldOfViewHorizontal[0]=" + angleHorizontalToAngleVertical(fieldOfViewHorizontal[0]) + " fieldOfViewHorizontal[1]=" + angleHorizontalToAngleVertical(fieldOfViewHorizontal[1]) + " angularResolutionVertical=" + angularResolutionVertical+ " verticalAngle="+ verticalAngle);
-                //numberOfRayHorizontal = 1;
                 for (int horizontalAngleIt = 0; horizontalAngleIt < numberOfRayHorizontal; horizontalAngleIt++)
                 {
                     float horizontalAngle = fieldOfViewHorizontal[0] + horizontalAngleIt * angularResolutionHorizontal;
                     rayCastNumber++;
                     if (rayCastNumber > lines.Length)
                     {
-                        Debug.LogError("[Lidar_model][createRays] frameCount=" + Time.frameCount + " rayCastNumber =" + rayCastNumber + " > lines.Length=" + lines.Length + " verticalAngle=" + verticalAngle + " horizontalAngle=" + horizontalAngle + " fieldOfViewHorizontal[0]=" + angleHorizontalToAngleVertical(fieldOfViewHorizontal[0]) + " fieldOfViewHorizontal[1]=" + angleHorizontalToAngleVertical(fieldOfViewHorizontal[1]) + " angularResolutionVertical=" + angularResolutionVertical);
+                        parameterScript.log("[Lidar_model][createRays] frameCount=" + Time.frameCount + " rayCastNumber =" + rayCastNumber + " > lines.Length=" + lines.Length + " verticalAngle=" + verticalAngle + " horizontalAngle=" + horizontalAngle + " fieldOfViewHorizontal[0]=" + angleHorizontalToAngleVertical(fieldOfViewHorizontal[0]) + " fieldOfViewHorizontal[1]=" + angleHorizontalToAngleVertical(fieldOfViewHorizontal[1]) + " angularResolutionVertical=" + angularResolutionVertical, -1);
                     }
 
                     float distanceX = (float)Math.Cos((float)((horizontalAngle) * Math.PI / 180));
                     float distanceZ = (float)Math.Sin((float)((horizontalAngle) * Math.PI / 180));
                     float distanceY = (float)Math.Cos((float)((verticalAngle) * Math.PI / 180));
                     Vector3 direction = headGameObject.transform.rotation * new Vector3(distanceX, distanceY, distanceZ);
-                    if (printDebug)
-                    {
-                        Debug.Log("[Lidar_model][createRays][3] verticalAngle=" + verticalAngle + " horizontalAngle=" + horizontalAngle + " verticalAngleIt=" + verticalAngleIt + " horizontalAngleIt=" + horizontalAngleIt + " distanceX=" + distanceX + " distanceZ=" + distanceZ + " distanceY=" + distanceY + " direction=" + direction + " laserGameObject.transform.rotation=" + headGameObject.transform.localRotation);
-                    }
+                    parameterScript.log("[Lidar_model][createRays][3] verticalAngle=" + verticalAngle + " horizontalAngle=" + horizontalAngle + " verticalAngleIt=" + verticalAngleIt + " horizontalAngleIt=" + horizontalAngleIt + " distanceX=" + distanceX + " distanceZ=" + distanceZ + " distanceY=" + distanceY + " direction=" + direction + " laserGameObject.transform.rotation=" + headGameObject.transform.localRotation, 3);                    
                     RaycastHit hit;
 
                     //if (Physics.Raycast(positionLidar, direction, out hit, distance))
@@ -165,7 +176,6 @@ public class Lidar_model : MonoBehaviour
                     {
                         if (hit.collider.tag != "Player")
                         {
-                            //Debug.Log("[Lidar_model][createRays][1] RayCast collide rayCastNumber="+ rayCastNumber + " distance=" + hit.distance + " collider=" + hit.distance + " at point=" + hit.point + " lineIterator=" + lineIterator);
                             Vector3 point = hit.point - positionLidar;
                             //All the points here are in the referencial of the scene. It should be the referencial of the lidar
                             point = Quaternion.Inverse(headGameObject.transform.rotation) * point;
@@ -179,7 +189,7 @@ public class Lidar_model : MonoBehaviour
                             //lines[lineIterator] = point.x.ToString() + " " + point.y.ToString() + " " + point.z.ToString() + " " + reflectance;
                             lines[lineIterator] = point.x.ToString() + " " + point.z.ToString() + " " + point.y.ToString() + " " + reflectance;
                             //lines[lineIterator] = point.x.ToString() + " " + point.y.ToString() + " " + point.z.ToString() + " " + reflectance + " "+ hit.collider.name+" "+ hit.collider.tag;
-                            //Debug.Log("[Lidar_model][createRays][5] frameCount=" + Time.frameCount + " lineIterator=" + lineIterator + " lines[lineIterator]=" + lines[lineIterator]);
+                            parameterScript.log("[Lidar_model][createRays][5] frameCount=" + Time.frameCount + " lineIterator=" + lineIterator + " lines[lineIterator]=" + lines[lineIterator], 3);
                             floatLines[lineIterator * 4 + 0] = point.x;
                             floatLines[lineIterator * 4 + 1] = point.z;
                             floatLines[lineIterator * 4 + 2] = point.y;
@@ -194,16 +204,18 @@ public class Lidar_model : MonoBehaviour
             if (rayCastNumber != numberOfRayVertical * numberOfRayHorizontal)
             {
                 int numberExpected = numberOfRayVertical * numberOfRayHorizontal;
-                Debug.LogError("[Lidar_model][createRays] frameCount=" + Time.frameCount + " rayCastNumber =" + rayCastNumber + " != numberExpected=" + numberExpected);
+                parameterScript.log("[Lidar_model][createRays] frameCount=" + Time.frameCount + " rayCastNumber =" + rayCastNumber + " != numberExpected=" + numberExpected, -1);
             }
         }
     }
+    void Update()
+    {
+        parameterScript.log("[Lidar_model][Update] frame=" + Time.frameCount + " fixedTime=" + Time.fixedTime + " fixedDeltaTime=" + Time.fixedDeltaTime + " time=" + Time.time, 2);
 
-
-
-    // Update is called once per frame
+    }
     void FixedUpdate()
     {
+        parameterScript.log("[Lidar_model][FixedUpdate] frame=" + Time.frameCount + " fixedTime=" + Time.fixedTime + " fixedDeltaTime=" + Time.fixedDeltaTime + " time=" + Time.time, 2);
         if (lidarEnable)
         {
             if (firstFrame)
@@ -211,23 +223,29 @@ public class Lidar_model : MonoBehaviour
                 initializeOnFirstFrame();
                 firstFrame = false;
             }
-            if (useRayCast)
-            {
-                lineIterator = 0;
-                createRayCast();
-            }
-            commandServerScript.sendLidarInfo(4* lineIterator, floatLines);
-            if (recordingEnable == true)
-            {
-                writeFile(Time.frameCount);
+            if (isFrameLidarFrame(Time.frameCount) )
+            {                
+                if (useRayCast)
+                {
+                    lineIterator = 0;
+                    createRayCast();
+                }
+                commandServerScript.sendLidarInfo(4 * lineIterator, floatLines);
+                if (recordingEnable == true)
+                {
+                    writeFile(Time.frameCount, Time.time);
+                }
             }
         }
     }
 
-    void writeFile(int frame)
+    void writeFile(int frame, float time)
     {
-        string outputFile = lidarTracePath +"\\"+ frame.ToString().PadLeft(10, '0') + ".txt";
-        //Debug.Log("[Lidar_model][writeFile] frameCount=" + Time.frameCount + " Writing lines to output file:" + outputFile);
+        //string outputFile = lidarTracePath +"\\"+ frame.ToString().PadLeft(10, '0') + ".txt";
+        int s = (int)(time);
+        int ms = (int) ((time - (float) s)* ((float) 1000));        
+        string outputFile = lidarTracePath + "\\" +s.ToString().PadLeft(4, '0') + "s_"+ms.ToString().PadLeft(4,'0')+ "ms.txt";
+        parameterScript.log("[Lidar_model][writeFile] frameCount=" + Time.frameCount + " Writing lines to output file:" + outputFile, 2);
         System.IO.File.WriteAllLines(outputFile, lines);
     }
 
@@ -271,9 +289,17 @@ public class Lidar_model : MonoBehaviour
     {
         showRay = a;
     }
-    public void setPrintDebug(bool a)
-    {
-        printDebug = a;
-    }
+ 
 
+    private bool isFrameLidarFrame(int frame)
+    {
+        bool isFrameLidarFrame = false;
+        //int frameIndexInTheSecond =frame % frameRate;
+        if(frame % (frameRate/rotationRateHz) == 0)
+        {
+            isFrameLidarFrame = true;
+        }
+        parameterScript.log("[Lidar_model][isFrameLidarFrame] frame=" + frame + " isFrameLidarFrame=" + isFrameLidarFrame + " rotationRateHz=" + rotationRateHz, 3);
+        return isFrameLidarFrame;
+    }
 }

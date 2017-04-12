@@ -995,7 +995,7 @@ Prefab:
     - target: {fileID: 114661495081350236, guid: 1df73e84a29a13546b693bec543a1422,
         type: 2}
       propertyPath: lidarEnable
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114661495081350236, guid: 1df73e84a29a13546b693bec543a1422,
         type: 2}
@@ -1006,6 +1006,21 @@ Prefab:
         type: 2}
       propertyPath: enableRecording
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114661495081350236, guid: 1df73e84a29a13546b693bec543a1422,
+        type: 2}
+      propertyPath: recordingEnable
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114661495081350236, guid: 1df73e84a29a13546b693bec543a1422,
+        type: 2}
+      propertyPath: numberOfChannel
+      value: 32
+      objectReference: {fileID: 0}
+    - target: {fileID: 114854050950528722, guid: 1df73e84a29a13546b693bec543a1422,
+        type: 2}
+      propertyPath: DebugLevel
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1df73e84a29a13546b693bec543a1422, type: 2}
