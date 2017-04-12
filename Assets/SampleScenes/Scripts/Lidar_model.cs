@@ -202,7 +202,7 @@ public class Lidar_model : MonoBehaviour
 
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (lidarEnable)
         {
@@ -215,15 +215,6 @@ public class Lidar_model : MonoBehaviour
             {
                 lineIterator = 0;
                 createRayCast();
-            }
-            if (enableMovementFromKeyboard)
-            {
-                //Function called right after the Frame is finished        
-                float moveHorizontal = Input.GetAxis("Horizontal");
-                float moveVertical = Input.GetAxis("Vertical");
-                Vector3 movement = new Vector3(moveHorizontal * 10, 0.0f, -moveVertical * 10);
-                Transform transform = GetComponent<Transform>();
-                transform.position += movement;
             }
             commandServerScript.sendLidarInfo(4* lineIterator, floatLines);
             if (recordingEnable == true)

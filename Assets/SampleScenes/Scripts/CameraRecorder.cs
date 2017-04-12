@@ -34,8 +34,9 @@ public class CameraRecorder : MonoBehaviour {
             firstFrame = false;
         }
         string timeStamp = System.DateTime.Now.ToString("HH_mm_ss_fff");
+
         if (recordingEnable == true) { 
-            WriteImage(OnBoardCamera, "OnBoardCamera", timeStamp);
+        WriteImage(OnBoardCamera, Time.frameCount.ToString().PadLeft(10, '0'));
         }
     }
 
@@ -52,7 +53,7 @@ public class CameraRecorder : MonoBehaviour {
         OpenFolder(tracePath);
         //print("Open Folder" + tracePath);
     }
-    private void WriteImage(Camera camera, string prepend, string timestamp)
+    private void WriteImage(Camera camera,  string timestamp)
     {
         //needed to force camera update 
         camera.Render();
@@ -64,7 +65,7 @@ public class CameraRecorder : MonoBehaviour {
         byte[] image = texture2D.EncodeToJPG();
         UnityEngine.Object.DestroyImmediate(texture2D);
         string directory = Path.Combine(m_saveLocation, camOutDir);
-        string path = Path.Combine(directory, prepend + "_" + timestamp + ".jpg");
+        string path = Path.Combine(directory,   timestamp + ".jpg");
         File.WriteAllBytes(path, image);
         image = null;
     }
