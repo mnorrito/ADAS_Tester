@@ -45,7 +45,7 @@ def getAdasOrder(sio, steering_angle, throttle, speed, distanceToWalker):
         if (ADAS_ALGO_SRC == "_octave_"):
             throttle = octave.detect_pedestrian(distanceToWalker, throttle, speed)
         pedestrian = 0
-        print('{} {} {} {}'.format(steering_angle, throttle, speed, pedestrian))
+        #print('{} {} {} {}'.format(steering_angle, throttle, speed, pedestrian))
         commandServer.sendDriveInfo(sio, steering_angle, throttle, pedestrian)
     except Exception as e:
         print(e)

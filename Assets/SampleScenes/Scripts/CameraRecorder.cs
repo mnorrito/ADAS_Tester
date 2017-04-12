@@ -9,7 +9,7 @@ public class CameraRecorder : MonoBehaviour {
     private Camera OnBoardCamera;
     private string m_saveLocation = "";
 
-    private bool enableRecording;
+    private bool recordingEnable;
     private string tracePath;
     public const string camOutDir = "CAMERA_OUTPUT";
     private bool firstFrame = true;
@@ -21,8 +21,8 @@ public class CameraRecorder : MonoBehaviour {
 
     private void initialize()
     {
-        enableRecording = GameObject.Find("Parameters").GetComponent<Parameters>().enableRecording;
-        
+        recordingEnable = GameObject.Find("Parameters").GetComponent<Parameters_Car>().recordingEnable;
+
     }
 
     // Update is called once per frame
@@ -34,8 +34,8 @@ public class CameraRecorder : MonoBehaviour {
             firstFrame = false;
         }
         string timeStamp = System.DateTime.Now.ToString("HH_mm_ss_fff");
-        if (enableRecording == true) { 
-        WriteImage(OnBoardCamera, "OnBoardCamera", timeStamp);
+        if (recordingEnable == true) { 
+            WriteImage(OnBoardCamera, "OnBoardCamera", timeStamp);
         }
     }
 

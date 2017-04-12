@@ -31,7 +31,7 @@ def toExtMsg(sid, data):
         if (msgHeader == "cameraImg"):
             receivedCameraImg(data)
             
-        if (msgHeader == "lidaInfo"):
+        if (msgHeader == "lidarInfo"):
             receivedLidarInfo(data)
     else:
         sendEmptyInfo(sio)
@@ -50,6 +50,13 @@ def receivedCameraImg(data):
 
 def receivedLidarInfo(data):
     msgSize = int(data["messageSize"])
+    receivedCoord = []
+    for coord in range(0, msgSize):
+        receivedCoord.append(float(data[str(coord)]))
+    for coord in range(0, int(msgSize/4)):
+        print (str(receivedCoord[4*coord]) + " " + str(receivedCoord[4*coord+1]) + " " + str(receivedCoord[4*coord+2]) + " " + str(receivedCoord[4*coord+3]))
+        
+        
 
 def sendDriveInfo(sio, steering_angle, throttle, pedestrian):
     msgHeader = "driveInfo"

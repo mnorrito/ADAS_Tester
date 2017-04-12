@@ -7,6 +7,7 @@ using System.IO;
 public class Lidar_model : MonoBehaviour
 {
     private Parameters_Lidar parameterLidarScript;
+    private CommandServer commandServerScript;
     private bool lidarEnable;
     private bool Velodyne_HDL_64E;
     private int numberOfChannel;
@@ -23,6 +24,7 @@ public class Lidar_model : MonoBehaviour
     private GameObject headGameObject;
     private bool useRayCast = true;
     private string[] lines;
+    private float[] floatLines;
     private int lineIterator = 0;
     private int numberOfRayVertical;
     private int numberOfRayHorizontal;
@@ -30,18 +32,20 @@ public class Lidar_model : MonoBehaviour
     private bool enableMovementFromKeyboard = false;
     public const string LidarDir = "LIDAR_OUTPUT";
     private bool firstFrame = true;
-
+    private bool recordingEnable;
 
 
     // Use this for initialization
     void Start()
     {
+        recordingEnable = GameObject.Find("Parameters").GetComponent<Parameters_Lidar>().recordingEnable;
         parameterLidarScript = GameObject.Find("Parameters").GetComponent<Parameters_Lidar>();
         lidarEnable = parameterLidarScript.lidarEnable;
         if (lidarEnable)
         {
             initialize();
         }
+        commandServerScript = GameObject.Find("IOScriptingTools").GetComponentInChildren<CommandServer>();
     }
 
     private void initialize()
@@ -68,6 +72,7 @@ public class Lidar_model : MonoBehaviour
         fieldOfViewTotalHorizontal = fieldOfViewHorizontal[1] - fieldOfViewHorizontal[0];
         numberOfRayHorizontal = (int)(fieldOfViewTotalHorizontal / angularResolutionHorizontal);
         lines = new string[numberOfRayVertical * numberOfRayHorizontal];
+        floatLines = new float[numberOfRayVertical * numberOfRayHorizontal * 4];
         if (printDebug)
         {
             printLidarParameters();
@@ -175,6 +180,11 @@ public class Lidar_model : MonoBehaviour
                             lines[lineIterator] = point.x.ToString() + " " + point.z.ToString() + " " + point.y.ToString() + " " + reflectance;
                             //lines[lineIterator] = point.x.ToString() + " " + point.y.ToString() + " " + point.z.ToString() + " " + reflectance + " "+ hit.collider.name+" "+ hit.collider.tag;
                             //Debug.Log("[Lidar_model][createRays][5] frameCount=" + Time.frameCount + " lineIterator=" + lineIterator + " lines[lineIterator]=" + lines[lineIterator]);
+                            floatLines[lineIterator * 4 + 0] = point.x;
+                            floatLines[lineIterator * 4 + 1] = point.z;
+                            floatLines[lineIterator * 4 + 2] = point.y;
+                            floatLines[lineIterator * 4 + 3] = (float)reflectance;
+
                             lineIterator++;
                         }
                     }
@@ -215,7 +225,11 @@ public class Lidar_model : MonoBehaviour
                 Transform transform = GetComponent<Transform>();
                 transform.position += movement;
             }
-            writeFile(Time.frameCount);
+            commandServerScript.sendLidarInfo(4* lineIterator, floatLines);
+            if (recordingEnable == true)
+            {
+                writeFile(Time.frameCount);
+            }
         }
     }
 

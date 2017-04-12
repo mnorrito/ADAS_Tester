@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Parameters_Car : MonoBehaviour {
     public bool standalone;
+    public bool recordingEnable;
 
     public GameObject Walker1;
     // Use this for initialization

@@ -5,6 +5,7 @@ using UnityEngine;
 public class Parameters_Lidar : MonoBehaviour
 {
     public bool lidarEnable;
+    public bool recordingEnable;
     public bool Velodyne_HDL_64E;
     public int numberOfChannel;
     public float[] fieldOfViewVertical;

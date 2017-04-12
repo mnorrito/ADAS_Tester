@@ -106,20 +106,36 @@ public class CommandServer : MonoBehaviour
     {
         UnityMainThreadDispatcher.Instance().Enqueue(() =>
         {
-                // Collect Data from the Car
-                Dictionary<string, string> data = new Dictionary<string, string>();
+            Dictionary<string, string> data = new Dictionary<string, string>();
 
             int msgSize = 1;
             data["messageHeader"] = "cameraImg";
             data["messageSize"] = msgSize.ToString();
 
             data["0"] = Convert.ToBase64String(CameraHelper.CaptureFrame(CarCamera));
-            _socket.Emit("telemetry", new JSONObject(data));
+            _socket.Emit("toExtMsg", new JSONObject(data));
         });
 
     }
 
+    public void sendLidarInfo(int msgSize, float [] matrix)
+    {
+        UnityMainThreadDispatcher.Instance().Enqueue(() =>
+        {
+            Dictionary<string, string> data = new Dictionary<string, string>();
 
+            data["messageHeader"] = "lidarInfo";
+            data["messageSize"] = msgSize.ToString();
+
+
+            for(int i=0; i< msgSize; i++)
+            {
+                data[i.ToString()] = matrix[i].ToString("N4");
+            }
+            _socket.Emit("toExtMsg", new JSONObject(data));
+        });
+
+    }
 
 
 }

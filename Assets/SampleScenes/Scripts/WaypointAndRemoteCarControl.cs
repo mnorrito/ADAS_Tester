@@ -17,12 +17,9 @@ namespace UnityStandardAssets.Vehicles.Car
         private Text warningText;
         private Text debugText;
 
-        
-
         public float SteeringAngle { get; set; }
         public float Acceleration { get; set; }
         public float Pedestrian { get; set; }
-
 		
         public enum BrakeCondition
         {
