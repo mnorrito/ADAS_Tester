@@ -7,6 +7,7 @@ public class Parameters_Lidar : MonoBehaviour
     public bool lidarEnable;
     public bool recordingEnable;
     public bool Velodyne_HDL_64E;
+    public bool LightVelodyne_HDL_64E;
     public bool Velodyne_HDL_64EDualMode;
     [SerializeField]
     [Range(5, 20)]

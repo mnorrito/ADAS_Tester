@@ -11,6 +11,7 @@ public class Lidar_model : MonoBehaviour
     private CommandServer commandServerScript;
     private bool lidarEnable;
     private bool Velodyne_HDL_64E;
+    private bool LightVelodyne_HDL_64E;
     public bool Velodyne_HDL_64EDualMode;
     private int rotationRateHz;
     private int numberOfChannel;
@@ -33,7 +34,7 @@ public class Lidar_model : MonoBehaviour
     private float fieldOfViewTotalHorizontal;
     //private int lastRecordedFrame;
     public const string LidarDir = "LIDAR_OUTPUT";
-    private bool firstFrame = true;
+    private int fixedUpdateCounter = -1;
     private bool recordingEnable;
     private int frameRate;
     private static int numberOfPointsPerSec_SingleMode = 1300000;
@@ -75,17 +76,30 @@ public class Lidar_model : MonoBehaviour
     private void initializeLidarParameters()
     {
         Velodyne_HDL_64E = parameterLidarScript.Velodyne_HDL_64E;
-        if(Velodyne_HDL_64E )
+        LightVelodyne_HDL_64E = parameterLidarScript.LightVelodyne_HDL_64E;
+        if (Velodyne_HDL_64E || LightVelodyne_HDL_64E)
         {
             rotationRateHz = parameterLidarScript.rotationRateHz;
             numberOfChannel = 64;
+            if (LightVelodyne_HDL_64E) { 
+                numberOfChannel = parameterLidarScript.numberOfChannel;
+            }
             fieldOfViewVertical = new float[] { 2, (float)-24.9 }; ;
             angularResolutionVertical = (float)0.4;
+            if (LightVelodyne_HDL_64E)
+            {
+                angularResolutionVertical = parameterLidarScript.angularResolutionVertical;
+            }
             fieldOfViewHorizontal = new float[] { 0, 360 };
             Velodyne_HDL_64EDualMode = parameterLidarScript.Velodyne_HDL_64EDualMode;
             fieldOfViewTotalHorizontal = fieldOfViewHorizontal[1] - fieldOfViewHorizontal[0];
             //Compute angularResolutionHorizontal
             angularResolutionHorizontal = computeAngularResolutionHorizontal_Velodyne_HDL_64E(Velodyne_HDL_64EDualMode, rotationRateHz, numberOfChannel, fieldOfViewTotalHorizontal);
+            if (LightVelodyne_HDL_64E)
+            {
+                angularResolutionHorizontal = parameterLidarScript.angularResolutionHorizontal;
+            }
+            //angularResolutionHorizontal = 1;
             measurementRange = 120;
             accuracy = (float)0.02;
             showRay = parameterLidarScript.showRay;
@@ -108,10 +122,8 @@ public class Lidar_model : MonoBehaviour
         numberOfRayVertical = numberOfChannel;        
         numberOfRayHorizontal = (int)(fieldOfViewTotalHorizontal / angularResolutionHorizontal);
         lines = new string[numberOfRayVertical * numberOfRayHorizontal];
-        floatLines = new float[numberOfRayVertical * numberOfRayHorizontal * 4];
-        
-        printLidarParameters();
-        
+        floatLines = new float[numberOfRayVertical * numberOfRayHorizontal * 4];        
+        printLidarParameters();        
     }
 
     private float computeAngularResolutionHorizontal_Velodyne_HDL_64E(bool dualReturnModeEnabled,  int rotationRate, int verticalRayNumber, float fieldOfView)
@@ -126,7 +138,9 @@ public class Lidar_model : MonoBehaviour
 
     private void printLidarParameters()
     {
-        parameterScript.log("[Lidar_model][printLidarParameters] rotationRateHz=" + rotationRateHz + " frameRate=" + frameRate + " numberOfChannel=" + numberOfChannel + " numberOfRayHorizontal=" + numberOfRayHorizontal + " fieldOfViewVertical=[" + fieldOfViewVertical[0] + ";] angularResolutionVertical=" + angularResolutionVertical + " fieldOfViewHorizontal=[" + fieldOfViewHorizontal[0] + ";" + fieldOfViewHorizontal[1] + "] angularResolutionHorizontal=" + angularResolutionHorizontal + " measurementRange=" + measurementRange + " accuracy" + accuracy, 1);
+        int numberOfPointsPerScan = numberOfChannel * numberOfRayHorizontal;
+        int numberOfPointsPerSec = numberOfPointsPerScan * rotationRateHz;
+        parameterScript.log("[Lidar_model][printLidarParameters] rotationRateHz=" + rotationRateHz + " frameRate=" + frameRate + " numberOfChannel=" + numberOfChannel + " numberOfRayHorizontal=" + numberOfRayHorizontal + " numberOfPointsPerScan="+ numberOfPointsPerScan + " numberOfPointsPerSec=" + numberOfPointsPerSec + " fieldOfViewVertical=[" + fieldOfViewVertical[0] + ";] angularResolutionVertical=" + angularResolutionVertical + " fieldOfViewHorizontal=[" + fieldOfViewHorizontal[0] + ";" + fieldOfViewHorizontal[1] + "] angularResolutionHorizontal=" + angularResolutionHorizontal + " measurementRange=" + measurementRange + " accuracy" + accuracy, 1);
     }
 
     private float angleHorizontalToAngleVertical(float angle)
@@ -215,15 +229,16 @@ public class Lidar_model : MonoBehaviour
     }
     void FixedUpdate()
     {
-        parameterScript.log("[Lidar_model][FixedUpdate] frame=" + Time.frameCount + " fixedTime=" + Time.fixedTime + " fixedDeltaTime=" + Time.fixedDeltaTime + " time=" + Time.time, 2);
+        fixedUpdateCounter++;
         if (lidarEnable)
         {
-            if (firstFrame)
+            if (fixedUpdateCounter == 0)
             {
                 initializeOnFirstFrame();
-                firstFrame = false;
             }
-            if (isFrameLidarFrame(Time.frameCount) )
+            bool lidarFrame = isFrameLidarFrame(fixedUpdateCounter);
+            parameterScript.log("[Lidar_model][FixedUpdate] fixedUpdateCounter="+ fixedUpdateCounter + " frame=" + Time.frameCount + " isFrameLidarFrame=" + lidarFrame + " fixedTime=" + Time.fixedTime + " fixedDeltaTime=" + Time.fixedDeltaTime + " time=" + Time.time, 2);
+            if (lidarFrame)
             {                
                 if (useRayCast)
                 {
@@ -289,7 +304,6 @@ public class Lidar_model : MonoBehaviour
     {
         showRay = a;
     }
- 
 
     private bool isFrameLidarFrame(int frame)
     {

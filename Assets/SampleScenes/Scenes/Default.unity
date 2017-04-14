@@ -1022,6 +1022,16 @@ Prefab:
       propertyPath: DebugLevel
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114661495081350236, guid: 1df73e84a29a13546b693bec543a1422,
+        type: 2}
+      propertyPath: angularResolutionHorizontal
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114333464256152570, guid: 1df73e84a29a13546b693bec543a1422,
+        type: 2}
+      propertyPath: fps
+      value: 24
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1df73e84a29a13546b693bec543a1422, type: 2}
   m_IsPrefabParent: 0

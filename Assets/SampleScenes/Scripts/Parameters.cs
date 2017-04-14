@@ -10,7 +10,6 @@ public class Parameters : MonoBehaviour {
     public Text distanceToWalkerText;
     public Text warningText;
     public Text debugText;
-    public bool realTime;
     private string traceFolder;
     private int frameRate = -1;
     [SerializeField]
@@ -21,12 +20,6 @@ public class Parameters : MonoBehaviour {
         traceFolder = tracePath +"\\"+ System.DateTime.Now.ToString("yyyy-MM-ddTHH.mm.ss");        
         Directory.CreateDirectory(traceFolder);
         computeFrameRate();
-        //Application.targetFrameRate = frameRate;
-        //QualitySettings.vSyncCount = 2;
-        if (realTime)
-        {
-            Time.captureFramerate = frameRate;            
-        }
         Time.fixedDeltaTime = ((float)1) / ((float)frameRate);
 
         log("[Parameters][Start] Application.frameRate=" + Application.targetFrameRate + " QualitySettings.vSyncCount=" + QualitySettings.vSyncCount + " Time.captureFramerate=" + Time.captureFramerate + " Time.fixedDeltaTime=" + Time.fixedDeltaTime,1);     
@@ -35,13 +28,14 @@ public class Parameters : MonoBehaviour {
     private void computeFrameRate()
     {
         int lidarRotationRateHz = this.GetComponent<Parameters_Lidar>().getRotationRateHz();
-        if (lidarRotationRateHz != 0)
+        int fpsCamera = this.GetComponent<Parameters_Car>().getFps();
+        if (lidarRotationRateHz != 0 && fpsCamera!=0)
         {
-            frameRate = PPCM(24, lidarRotationRateHz);
+            frameRate = PPCM(fpsCamera, lidarRotationRateHz);
         }
         else
         {
-            frameRate = 24;
+            frameRate = fpsCamera;
         }
     }
 

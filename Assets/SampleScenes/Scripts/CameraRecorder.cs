@@ -12,7 +12,7 @@ public class CameraRecorder : MonoBehaviour {
     private bool recordingEnable;
     private string tracePath;
     public const string camOutDir = "CAMERA_OUTPUT";
-    private bool firstFrame = true;
+    private int fixedUpdateCounter = -1;
     private int frameRate;
     private int framePerSecond = 24;
 
@@ -25,19 +25,21 @@ public class CameraRecorder : MonoBehaviour {
     private void initialize()
     {
         recordingEnable = GameObject.Find("Parameters").GetComponent<Parameters_Car>().recordingEnable;
+        framePerSecond = GameObject.Find("Parameters").GetComponent<Parameters_Car>().getFps();
         frameRate = parameterScript.getFrameRate();
     }
-
+    
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (firstFrame)
+        fixedUpdateCounter++;
+        if (fixedUpdateCounter==0)
         {
             initializeOnFirstFrame();
-            firstFrame = false;
         }
-        parameterScript.log("[CameraRecorder][FixedUpdate] Application.frameRate=" + Application.targetFrameRate + " QualitySettings.vSyncCount=" + QualitySettings.vSyncCount + " Time.captureFramerate=" + Time.captureFramerate + " Time.fixedDeltaTime=" + Time.fixedDeltaTime + " Time.deltaTime=" + Time.deltaTime, 2);
-        if (recordingEnable == true && isFrameCameraFrame(Time.frameCount)) {
+        bool cameraFrame = isFrameCameraFrame(fixedUpdateCounter);
+        parameterScript.log("[CameraRecorder][FixedUpdate] fixedUpdateCounter="+ fixedUpdateCounter + " frame=" + Time.frameCount + " isFrameCameraFrame="+ cameraFrame + " fixedTime=" + Time.fixedTime + " fixedDeltaTime=" + Time.fixedDeltaTime + " time=" + Time.time, 2);
+        if (recordingEnable == true && cameraFrame) {
             int s = (int)(Time.time);
             int ms = (int)((Time.time - (float)s) * ((float)1000));
             string name = s.ToString().PadLeft(4, '0') + "s_" + ms.ToString().PadLeft(4, '0') + "ms";
