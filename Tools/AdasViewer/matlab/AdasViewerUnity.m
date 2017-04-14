@@ -1,4 +1,4 @@
-function AdasViewer (dataBaseFolder,varargin)
+function AdasViewerUnity (dataBaseFolder,varargin)
 
 
 LoopInf = 0;
@@ -21,29 +21,17 @@ for k = 1:nVarargs
     if strcmp(varargin{k}{1},'enOxts')
        enOxts = varargin{k}{2};
     end  
-    if strcmp(varargin{k}{1},'enUnity')
-       enUnity = varargin{k}{2};
-    end  
 
 end
 
     rootFolder = dataBaseFolder{1};
     
-if enUnity==1 
      lidarFolder = strcat(rootFolder,'/LIDAR_OUTPUT/')
     trackletsFolder = rootFolder;
     listLidarFileBin=dir(fullfile(strcat(lidarFolder,'*.bin')));
     listLidarFileTxt=dir(fullfile(strcat(lidarFolder,'*.txt')));
     listBin = size(listLidarFileBin);
     listBin = listBin(1,1);
-else
-    lidarFolder = strcat(rootFolder,'/velodyne_points/data/')
-    trackletsFolder = rootFolder;
-    listLidarFileBin=dir(fullfile(strcat(lidarFolder,'*.bin')));
-    listLidarFileTxt=dir(fullfile(strcat(lidarFolder,'*.txt')));
-    listBin = size(listLidarFileBin);
-    listBin = listBin(1,1);
-end
 
 
 %main Folder

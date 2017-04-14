@@ -3,7 +3,7 @@ guid: 562e2210ea57c5d44b6437c8a4124232
 timeCreated: 1457011908
 licenseType: Store
 ModelImporter:
-  serializedVersion: 18
+  serializedVersion: 19
   fileIDToRecycleName:
     100000: Circle.000
     100002: Circle.001
@@ -144,6 +144,33 @@ ModelImporter:
     4300048: Circle.002
     4300050: Plane.001
     4300052: Cylinder
+    6400000: Circle.000
+    6400002: Circle.001
+    6400004: Circle.002
+    6400006: Circle.003
+    6400008: Circle.004
+    6400010: Circle.005
+    6400012: Cube.000
+    6400014: Cube.002
+    6400016: Cylinder
+    6400018: Cylinder.000
+    6400020: Cylinder.001
+    6400022: Cylinder.002
+    6400024: Cylinder.003
+    6400026: Cylinder.004
+    6400028: Cylinder.005
+    6400030: Cylinder.006
+    6400032: Plane.000
+    6400034: Plane.001
+    6400036: Plane.002
+    6400038: Plane.003
+    6400040: Plane.004
+    6400042: Plane.005
+    6400044: Plane.006
+    6400046: Plane.007
+    6400048: Plane.008
+    6400050: Plane.009
+    6400052: Plane.010
   materials:
     importMaterials: 1
     materialName: 0
@@ -151,12 +178,17 @@ ModelImporter:
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
+    resampleCurves: 1
     optimizeGameObjects: 0
     motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
     animationCompression: 1
-    animationRotationError: .5
-    animationPositionError: .5
-    animationScaleError: .5
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
     clipAnimations: []
@@ -165,7 +197,7 @@ ModelImporter:
     lODScreenPercentages: []
     globalScale: 1
     meshCompression: 0
-    addColliders: 0
+    addColliders: 1
     importBlendShapes: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
@@ -180,24 +212,29 @@ ModelImporter:
     useFileScale: 1
   tangentSpace:
     normalSmoothAngle: 60
-    splitTangentsAcrossUV: 1
     normalImportMode: 0
-    tangentImportMode: 1
+    tangentImportMode: 4
   importAnimation: 1
   copyAvatar: 0
   humanDescription:
+    serializedVersion: 2
     human: []
     skeleton: []
-    armTwist: .5
-    foreArmTwist: .5
-    upperLegTwist: .5
-    legTwist: .5
-    armStretch: .0500000007
-    legStretch: .0500000007
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
     feetSpacing: 0
     rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 0
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   animationType: 0
+  humanoidOversampling: 1
   additionalBone: 0
   userData: 
   assetBundleName: 

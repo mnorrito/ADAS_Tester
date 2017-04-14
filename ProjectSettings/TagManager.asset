@@ -5,6 +5,11 @@ TagManager:
   serializedVersion: 2
   tags:
   - Fire
+  - Lidar_model
+  - car
+  - pedestrian
+  - sign
+  - others
   layers:
   - Default
   - TransparentFX

@@ -17,10 +17,24 @@ public class Parameters : MonoBehaviour {
     public int DebugLevel;
     private static int minimumFrameRate = 60;
     // Use this for initialization
-    void Start () {
+
+    private void Awake()
+    {
         string timeStamp = System.DateTime.Now.ToString("yyyy-MM-ddTHH.mm.ss");
         traceFolder = Path.Combine(tracePath, timeStamp);
         Directory.CreateDirectory(traceFolder);
+        computeFrameRate();
+        Time.fixedDeltaTime = ((float)1) / ((float)frameRate);
+
+        log("[Parameters][Start] Application.frameRate=" + Application.targetFrameRate + "frameRate=" + frameRate + " QualitySettings.vSyncCount=" + QualitySettings.vSyncCount + " Time.captureFramerate=" + Time.captureFramerate + " Time.fixedDeltaTime=" + Time.fixedDeltaTime, 1);
+
+    }
+
+
+    void Start () {
+        //string timeStamp = System.DateTime.Now.ToString("yyyy-MM-ddTHH.mm.ss");
+        //traceFolder = Path.Combine(tracePath, timeStamp);
+        //Directory.CreateDirectory(traceFolder);
         computeFrameRate();     
         Time.fixedDeltaTime = ((float)1) / ((float)frameRate);
 
