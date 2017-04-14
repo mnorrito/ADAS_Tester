@@ -59,11 +59,21 @@ public class Parameters_Lidar : MonoBehaviour
     }    
     public int getRotationRateHz()
     {
-
-        if (!Velodyne_HDL_64E)
+        if (!useRotationHz())
         {
-            rotationRateHz = 24;
+            rotationRateHz = 0;
         }
         return rotationRateHz;
+    }
+    public bool useRotationHz()
+    {
+        if((Velodyne_HDL_64E == true || LightVelodyne_HDL_64E == true ) && lidarEnable == true)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }

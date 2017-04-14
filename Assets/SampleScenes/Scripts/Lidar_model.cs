@@ -308,10 +308,19 @@ public class Lidar_model : MonoBehaviour
     private bool isFrameLidarFrame(int frame)
     {
         bool isFrameLidarFrame = false;
-        //int frameIndexInTheSecond =frame % frameRate;
-        if(frame % (frameRate/rotationRateHz) == 0)
+        if (parameterLidarScript.useRotationHz() == true)
         {
-            isFrameLidarFrame = true;
+
+
+            //int frameIndexInTheSecond =frame % frameRate;
+            if (frame % (frameRate / rotationRateHz) == 0)
+            {
+                isFrameLidarFrame = true;
+            }
+        }
+        else
+        {
+            return true;
         }
         parameterScript.log("[Lidar_model][isFrameLidarFrame] frame=" + frame + " isFrameLidarFrame=" + isFrameLidarFrame + " rotationRateHz=" + rotationRateHz, 3);
         return isFrameLidarFrame;
