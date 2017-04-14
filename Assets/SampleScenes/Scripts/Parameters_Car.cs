@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Parameters_Car : MonoBehaviour {
-    public bool standalone;
-    public bool recordingEnable;
-    public int fps ;
+    [SerializeField]
+    private bool standalone;
 
-    public GameObject Walker1;
+
     // Use this for initialization
     void Start () {
 
@@ -18,16 +17,9 @@ public class Parameters_Car : MonoBehaviour {
 		
 	}
 
-    public int getFps()
+    public bool isStandalone()
     {
-        if (fps > 0)
-        {
-            return fps;
-        }else
-        {
-            fps = 24;
-            return fps;
-        }
-
+        return standalone;
     }
+
 }

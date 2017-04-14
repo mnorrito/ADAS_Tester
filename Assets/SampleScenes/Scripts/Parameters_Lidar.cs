@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class Parameters_Lidar : MonoBehaviour
 {
-    public bool lidarEnable;
-    public bool recordingEnable;
+    [SerializeField]
+    private bool lidarEnable;
+    [SerializeField]
+    private bool recordingEnable;
     public bool Velodyne_HDL_64E;
     public bool LightVelodyne_HDL_64E;
     public bool Velodyne_HDL_64EDualMode;
@@ -75,5 +77,14 @@ public class Parameters_Lidar : MonoBehaviour
         {
             return false;
         }
+    }
+    public bool isLidarEnabled()
+    {
+        return lidarEnable;
+    }
+
+    public bool isRecordingEnabled()
+    {
+        return recordingEnable;
     }
 }

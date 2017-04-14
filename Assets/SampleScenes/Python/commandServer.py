@@ -41,20 +41,22 @@ def receivedTelemetry(data):
     throttle = float(data["1"])
     speed = float(data["2"])
     distanceToWalker = float(data["3"])
-    
+    #print("Received telemetry")
     drive.getAdasOrder(sio, steering_angle, throttle, speed, distanceToWalker)
 
 
 def receivedCameraImg(data):
     image = Image.open(BytesIO(base64.b64decode(data["0"])))
+    #print("Received image")
 
 def receivedLidarInfo(data):
+    #print("Received lidar info")
     msgSize = int(data["messageSize"])
     receivedCoord = []
     for coord in range(0, msgSize):
         receivedCoord.append(float(data[str(coord)]))
-    for coord in range(0, int(msgSize/4)):
-        print (str(receivedCoord[4*coord]) + " " + str(receivedCoord[4*coord+1]) + " " + str(receivedCoord[4*coord+2]) + " " + str(receivedCoord[4*coord+3]))
+    #for coord in range(0, int(msgSize/4)):
+        #print (str(receivedCoord[4*coord]) + " " + str(receivedCoord[4*coord+1]) + " " + str(receivedCoord[4*coord+2]) + " " + str(receivedCoord[4*coord+3]))
         
         
 

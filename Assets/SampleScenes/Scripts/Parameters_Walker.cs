@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Parameters_Walker : MonoBehaviour {
+    public GameObject Walker1;
     public float walkSpeedMultiplier;
     public bool moveEnable;
     // Use this for initialization

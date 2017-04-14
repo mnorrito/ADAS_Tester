@@ -77,14 +77,17 @@ namespace UnityStandardAssets.Vehicles.Car
         private float m_AvoidOtherCarSlowdown;    // how much to slow down due to colliding with another car, whilst avoiding
         private float m_AvoidPathOffset;          // direction (-1 or 1) in which to offset path to avoid other car, whilst avoiding
         private Rigidbody m_Rigidbody;
-
+        private CommandServer commandServerScript;
+        private int fixedUpdateCounter = -1;
         private float distanceToWalker;
-
+        private Parameters parameterScript;
 
         private void Awake()
         {
-            standaloneMode = GameObject.Find("Parameters").GetComponent<Parameters_Car>().standalone;
-            Walker1 = GameObject.Find("Parameters").GetComponent<Parameters_Car>().Walker1;
+            parameterScript = GameObject.Find("Parameters").GetComponent<Parameters>();
+            commandServerScript = GameObject.Find("IOScriptingTools").GetComponentInChildren<CommandServer>();
+            standaloneMode = GameObject.Find("Parameters").GetComponent<Parameters_Car>().isStandalone();
+            Walker1 = GameObject.Find("Parameters").GetComponent<Parameters>().Walker1;
             // get the car controller reference
             m_CarController = GetComponent<CarController>();
 
@@ -102,7 +105,8 @@ namespace UnityStandardAssets.Vehicles.Car
 
 		private void FixedUpdate()
         {
-
+            fixedUpdateCounter++;
+            parameterScript.log("[WaypointAndRemoteCarControl][FixedUpdate] fixedUpdateCounter=" + fixedUpdateCounter + " frame=" + Time.frameCount +" fixedTime=" + Time.fixedTime + " fixedDeltaTime=" + Time.fixedDeltaTime + " time=" + Time.time, 2);
             if (m_Target == null || !m_Driving)
             {
                 // Car should not be moving,
@@ -288,6 +292,13 @@ namespace UnityStandardAssets.Vehicles.Car
                 }
             }
 
+            int msgSize = 4;
+            float[] paramArray = new float[4];
+            paramArray[0] = m_CarController.CurrentSteerAngle;
+            paramArray[1] = Acceleration;
+            paramArray[2] = m_CarController.CurrentSpeed;
+            paramArray[3] = (transform.position - Walker1.transform.position).magnitude;
+            commandServerScript.sendTelemetry(msgSize,paramArray);
         }
 
 

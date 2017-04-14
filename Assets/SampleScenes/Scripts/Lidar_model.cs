@@ -45,10 +45,10 @@ public class Lidar_model : MonoBehaviour
     {
         parameterScript = GameObject.Find("Parameters").GetComponent<Parameters>();
         parameterLidarScript = GameObject.Find("Parameters").GetComponent<Parameters_Lidar>();
-        recordingEnable = parameterLidarScript.recordingEnable;
+        recordingEnable = parameterLidarScript.isRecordingEnabled();
         //lastRecordedFrame = -1;
 
-        lidarEnable = parameterLidarScript.lidarEnable;
+        lidarEnable = parameterLidarScript.isLidarEnabled();
         if (lidarEnable)
         {
             initialize();

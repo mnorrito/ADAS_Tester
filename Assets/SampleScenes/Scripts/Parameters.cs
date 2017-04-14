@@ -6,50 +6,50 @@ using System.IO;
 
 public class Parameters : MonoBehaviour {
     public string tracePath;
+    public GameObject Walker1;
     public GameObject adasCarGameObject;
     public Text distanceToWalkerText;
     public Text warningText;
     public Text debugText;
     private string traceFolder;
-    private int frameRate = -1;
+    private int frameRate;
     [SerializeField]
     [Range(0, 3)]
     public int DebugLevel;
-    private static int minimumFrameRate = 24;
+    private static int minimumFrameRate = 120;
     // Use this for initialization
     void Start () {
-        traceFolder = tracePath +"\\"+ System.DateTime.Now.ToString("yyyy-MM-ddTHH.mm.ss");        
+        string timeStamp = System.DateTime.Now.ToString("yyyy-MM-ddTHH.mm.ss");
+        traceFolder = Path.Combine(tracePath, timeStamp);
         Directory.CreateDirectory(traceFolder);
         computeFrameRate();     
         Time.fixedDeltaTime = ((float)1) / ((float)frameRate);
 
-        log("[Parameters][Start] Application.frameRate=" + Application.targetFrameRate + " QualitySettings.vSyncCount=" + QualitySettings.vSyncCount + " Time.captureFramerate=" + Time.captureFramerate + " Time.fixedDeltaTime=" + Time.fixedDeltaTime,1);     
+        log("[Parameters][Start] Application.frameRate=" + Application.targetFrameRate + "frameRate=" + frameRate + " QualitySettings.vSyncCount=" + QualitySettings.vSyncCount + " Time.captureFramerate=" + Time.captureFramerate + " Time.fixedDeltaTime=" + Time.fixedDeltaTime,1);     
     }
 
     private void computeFrameRate()
     {
-        int lidarRotationRateHz = this.GetComponent<Parameters_Lidar>().getRotationRateHz();
-        int fpsCamera = this.GetComponent<Parameters_Car>().getFps();
-        if (lidarRotationRateHz != 0 && fpsCamera!=0)
-        {
-            frameRate = PPCM(fpsCamera, lidarRotationRateHz);
+        int lidarRotationRateHz = 1;
+        int fpsCamera = 1;
+        if (this.GetComponent<Parameters_Lidar>().isLidarEnabled())
+        { 
+            lidarRotationRateHz = this.GetComponent<Parameters_Lidar>().getRotationRateHz();
         }
-        else
+        if(this.GetComponent<Parameters_CarCamera>().isCameraEnabled())
         {
-            frameRate = fpsCamera;
+            fpsCamera = this.GetComponent<Parameters_CarCamera>().getFps();
         }
-        if(frameRate < minimumFrameRate)
+        frameRate = PPCM(fpsCamera, lidarRotationRateHz);
+        while (frameRate < minimumFrameRate)
         {
-            frameRate = minimumFrameRate;
+            frameRate = 2 * frameRate;
         }
+
     }
 
     public int getFrameRate()
     {
-        if(frameRate == -1)
-        {
-            computeFrameRate();
-        }
         return frameRate;
     }
 

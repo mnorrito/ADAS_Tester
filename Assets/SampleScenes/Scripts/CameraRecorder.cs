@@ -10,22 +10,25 @@ public class CameraRecorder : MonoBehaviour {
     private string m_saveLocation = "";
     private Parameters parameterScript;
     private bool recordingEnable;
+    private bool cameraEnable;
     private string tracePath;
     public const string camOutDir = "CAMERA_OUTPUT";
     private int fixedUpdateCounter = -1;
     private int frameRate;
-    private int framePerSecond = 24;
+    private int framePerSecond;
+    private CommandServer commandServerScript;
 
     void Start () {
         parameterScript = GameObject.Find("Parameters").GetComponent<Parameters>();
         initialize();
-        
+        commandServerScript = GameObject.Find("IOScriptingTools").GetComponentInChildren<CommandServer>();
     }
 
     private void initialize()
     {
-        recordingEnable = GameObject.Find("Parameters").GetComponent<Parameters_Car>().recordingEnable;
-        framePerSecond = GameObject.Find("Parameters").GetComponent<Parameters_Car>().getFps();
+        recordingEnable = GameObject.Find("Parameters").GetComponent<Parameters_CarCamera>().isRecordingEnabled();
+        cameraEnable = GameObject.Find("Parameters").GetComponent<Parameters_CarCamera>().isCameraEnabled();
+        framePerSecond = GameObject.Find("Parameters").GetComponent<Parameters_CarCamera>().getFps();
         frameRate = parameterScript.getFrameRate();
     }
     
@@ -39,11 +42,20 @@ public class CameraRecorder : MonoBehaviour {
         }
         bool cameraFrame = isFrameCameraFrame(fixedUpdateCounter);
         parameterScript.log("[CameraRecorder][FixedUpdate] fixedUpdateCounter="+ fixedUpdateCounter + " frame=" + Time.frameCount + " isFrameCameraFrame="+ cameraFrame + " fixedTime=" + Time.fixedTime + " fixedDeltaTime=" + Time.fixedDeltaTime + " time=" + Time.time, 2);
-        if (recordingEnable == true && cameraFrame) {
-            int s = (int)(Time.time);
-            int ms = (int)((Time.time - (float)s) * ((float)1000));
-            string name = s.ToString().PadLeft(4, '0') + "s_" + ms.ToString().PadLeft(4, '0') + "ms";
-            WriteImage(OnBoardCamera, name);
+        if (cameraEnable == true)
+        {
+            if (cameraFrame == true)
+            {
+                byte[] image = CameraHelper.CaptureFrame(OnBoardCamera);
+                commandServerScript.sendCameraImg(image);
+            }
+            if (recordingEnable == true && cameraFrame)
+            {
+                int s = (int)(Time.time);
+                int ms = (int)((Time.time - (float)s) * ((float)1000));
+                string name = s.ToString().PadLeft(4, '0') + "s_" + ms.ToString().PadLeft(4, '0') + "ms";
+                WriteImage(OnBoardCamera, name);
+            }
         }
     }
 

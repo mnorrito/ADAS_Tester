@@ -1,5 +1,5 @@
-ADAS_ALGO_SRC = "_octave_"
-#ADAS_ALGO_SRC = "_python_"
+#ADAS_ALGO_SRC = "_octave_"
+ADAS_ALGO_SRC = "_python_"
 #ADAS_ALGO_SRC = "_matlab_"
 
 import base64
@@ -22,7 +22,7 @@ if (ADAS_ALGO_SRC == "_octave_"):
     
 if (ADAS_ALGO_SRC == "_matlab_"):
     import matlab.engine
-    
+    eng = matlab.engine.start_matlab()
 
 MAX_SPEED = 25
 MIN_SPEED = 10
@@ -44,6 +44,10 @@ def getAdasOrder(sio, steering_angle, throttle, speed, distanceToWalker):
             
         if (ADAS_ALGO_SRC == "_octave_"):
             throttle = octave.detect_pedestrian(distanceToWalker, throttle, speed)
+            
+        if (ADAS_ALGO_SRC == "_matlab_"):
+            eng.detect_pedestrian(distanceToWalker, throttle, speed)
+            
         pedestrian = 0
         #print('{} {} {} {}'.format(steering_angle, throttle, speed, pedestrian))
         commandServer.sendDriveInfo(sio, steering_angle, throttle, pedestrian)
