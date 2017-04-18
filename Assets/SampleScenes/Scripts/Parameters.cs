@@ -15,11 +15,12 @@ public class Parameters : MonoBehaviour {
     [SerializeField]
     [Range(0, 3)]
     public int DebugLevel;
+    private static int minimumFrameRate = 24;
     // Use this for initialization
     void Start () {
         traceFolder = tracePath +"\\"+ System.DateTime.Now.ToString("yyyy-MM-ddTHH.mm.ss");        
         Directory.CreateDirectory(traceFolder);
-        computeFrameRate();
+        computeFrameRate();     
         Time.fixedDeltaTime = ((float)1) / ((float)frameRate);
 
         log("[Parameters][Start] Application.frameRate=" + Application.targetFrameRate + " QualitySettings.vSyncCount=" + QualitySettings.vSyncCount + " Time.captureFramerate=" + Time.captureFramerate + " Time.fixedDeltaTime=" + Time.fixedDeltaTime,1);     
@@ -36,6 +37,10 @@ public class Parameters : MonoBehaviour {
         else
         {
             frameRate = fpsCamera;
+        }
+        if(frameRate < minimumFrameRate)
+        {
+            frameRate = minimumFrameRate;
         }
     }
 
