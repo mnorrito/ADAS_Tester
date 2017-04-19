@@ -46,6 +46,7 @@ def receivedTelemetry(data):
 
 
 def receivedCameraImg(data):
+    imageName = data["0"]
     image = Image.open(BytesIO(base64.b64decode(data["0"])))
     #print("Received image")
 

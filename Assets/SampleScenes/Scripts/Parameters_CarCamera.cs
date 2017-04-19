@@ -4,12 +4,21 @@ using UnityEngine;
 
 public class Parameters_CarCamera : MonoBehaviour {
     [SerializeField]
-    private bool cameraEnable;
+    private bool onBoardCamEnable;
     [SerializeField]
-    private bool recordingEnable;
+    private bool onBoardCamRecEnable;
     [SerializeField]
     [Range(1, 120)]
-    private int m_fps=6 ;
+    private int m_onBoardCamFps = 6;
+
+    [SerializeField]
+    private bool sideCamEnable;
+    [SerializeField]
+    private bool sideCamRecEnable;
+    [SerializeField]
+    [Range(1, 120)]
+    private int m_sideCamFps = 6;
+
 
     // Use this for initialization
     void Start () {
@@ -19,19 +28,35 @@ public class Parameters_CarCamera : MonoBehaviour {
     void Update () {
 		
 	}
-    public bool isCameraEnabled()
+    public bool isOnBoardCameraEnabled()
     {
-        return cameraEnable;
+        return onBoardCamEnable;
     }
 
-    public bool isRecordingEnabled()
+    public bool isOnBoardCameraRecordingEnabled()
     {
-        return recordingEnable;
+        return onBoardCamRecEnable;
     }
 
-    public int getFps()
+    public int getOnBoardCameraFps()
     {
-        return m_fps;
+        return m_onBoardCamFps;
+
+    }
+
+    public bool isSideCameraEnabled()
+    {
+        return sideCamEnable;
+    }
+
+    public bool isSideCameraRecordingEnabled()
+    {
+        return sideCamRecEnable;
+    }
+
+    public int getSideCameraFps()
+    {
+        return m_sideCamFps;
 
     }
 }

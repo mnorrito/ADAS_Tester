@@ -31,16 +31,23 @@ public class Parameters : MonoBehaviour {
     private void computeFrameRate()
     {
         int lidarRotationRateHz = 1;
-        int fpsCamera = 1;
+        int onBoardCameraFps = 1;
+        int sideCameraFps = 1;
         if (this.GetComponent<Parameters_Lidar>().isLidarEnabled())
         { 
             lidarRotationRateHz = this.GetComponent<Parameters_Lidar>().getRotationRateHz();
         }
-        if(this.GetComponent<Parameters_CarCamera>().isCameraEnabled())
+        if(this.GetComponent<Parameters_CarCamera>().isOnBoardCameraEnabled())
         {
-            fpsCamera = this.GetComponent<Parameters_CarCamera>().getFps();
+            onBoardCameraFps = this.GetComponent<Parameters_CarCamera>().getOnBoardCameraFps();
         }
-        frameRate = PPCM(fpsCamera, lidarRotationRateHz);
+        if (this.GetComponent<Parameters_CarCamera>().isSideCameraEnabled())
+        {
+            sideCameraFps = this.GetComponent<Parameters_CarCamera>().getSideCameraFps();
+        }
+
+        int cameraFramRate = PPCM(onBoardCameraFps, sideCameraFps);
+        frameRate = PPCM(cameraFramRate, lidarRotationRateHz);
         while (frameRate < minimumFrameRate)
         {
             frameRate = 2 * frameRate;

@@ -84,17 +84,18 @@ public class CommandServer : MonoBehaviour
     }
 
 
-    public void sendCameraImg(byte[] image)
+    public void sendCameraImg(string name, byte[] image)
     {
         UnityMainThreadDispatcher.Instance().Enqueue(() =>
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
 
-            int msgSize = 1;
+            int msgSize = 2;
             data["messageHeader"] = "cameraImg";
             data["messageSize"] = msgSize.ToString();
 
-            data["0"] = Convert.ToBase64String(image);
+            data["0"] = name;
+            data["1"] = Convert.ToBase64String(image);
             _socket.Emit("toExtMsg", new JSONObject(data));
         });
 
