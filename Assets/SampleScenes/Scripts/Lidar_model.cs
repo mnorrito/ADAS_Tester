@@ -255,11 +255,14 @@ public class Lidar_model : MonoBehaviour
     }
 
     void writeFile(int frame, float time)
-    {
-        //string outputFile = lidarTracePath +"\\"+ frame.ToString().PadLeft(10, '0') + ".txt";
-        int s = (int)(time);
-        int ms = (int) ((time - (float) s)* ((float) 1000));        
-        string outputFile = lidarTracePath + "\\" +s.ToString().PadLeft(4, '0') + "s_"+ms.ToString().PadLeft(4,'0')+ "ms.txt";
+    {        
+        //int s = (int)(time);
+        //int ms = (int) ((time - (float) s)* ((float) 1000));        
+        //string outputFile = lidarTracePath + "\\" +s.ToString().PadLeft(4, '0') + "s_"+ms.ToString().PadLeft(4,'0')+ "ms.txt";
+
+        int time_ms = (int)(Time.time * 1000);
+        string outputFile = lidarTracePath + "\\" + time_ms.ToString().PadLeft(10, '0')+".txt";
+
         parameterScript.log("[Lidar_model][writeFile] frameCount=" + Time.frameCount + " Writing lines to output file:" + outputFile, 2);
         System.IO.File.WriteAllLines(outputFile, lines);
     }

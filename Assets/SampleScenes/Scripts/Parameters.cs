@@ -30,10 +30,10 @@ public class Parameters : MonoBehaviour {
 
     private void computeFrameRate()
     {
-        int lidarRotationRateHz = 1;
+        int lidarRotationRateHz = 0;
         int onBoardCameraFps = 1;
         int sideCameraFps = 1;
-        if (this.GetComponent<Parameters_Lidar>().isLidarEnabled())
+        if (this.GetComponent<Parameters_Lidar>().isLidarEnabled() && this.GetComponent<Parameters_Lidar>().useRotationHz())
         { 
             lidarRotationRateHz = this.GetComponent<Parameters_Lidar>().getRotationRateHz();
         }
@@ -47,7 +47,13 @@ public class Parameters : MonoBehaviour {
         }
 
         int cameraFramRate = PPCM(onBoardCameraFps, sideCameraFps);
-        frameRate = PPCM(cameraFramRate, lidarRotationRateHz);
+        if (lidarRotationRateHz != 0)
+        {
+            frameRate = PPCM(cameraFramRate, lidarRotationRateHz);
+        }else
+        {
+            frameRate = cameraFramRate;
+        }
         while (frameRate < minimumFrameRate)
         {
             frameRate = 2 * frameRate;

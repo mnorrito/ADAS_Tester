@@ -42,10 +42,12 @@ public class SideCameraRecorder : MonoBehaviour {
             bool isCameraFrame = isFrameCameraFrame(fixedUpdateCounter);
             if (isCameraFrame == true)
             {
-                int s = (int)(Time.time);
-                int ms = (int)((Time.time - (float)s) * ((float)1000));
-                string name = myCameraName + s.ToString().PadLeft(4, '0') + "s_" + ms.ToString().PadLeft(4, '0') + "ms";
+                //int s = (int)(Time.time);
+                //int ms = (int)((Time.time - (float)s) * ((float)1000));
+                //string name = myCameraName+"_" + s.ToString().PadLeft(4, '0') + "s_" + ms.ToString().PadLeft(4, '0') + "ms";
 
+                int time_ms = (int)(Time.time * 1000);
+                string name = myCameraName + "_" + time_ms.ToString().PadLeft(10, '0');
                 byte[] image = CameraHelper.CaptureFrame(myCamera);
                 commandServerScript.sendCameraImg(name, image);
 

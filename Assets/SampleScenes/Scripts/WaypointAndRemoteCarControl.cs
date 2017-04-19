@@ -297,7 +297,13 @@ namespace UnityStandardAssets.Vehicles.Car
             paramArray[0] = m_CarController.CurrentSteerAngle;
             paramArray[1] = Acceleration;
             paramArray[2] = m_CarController.CurrentSpeed;
-            paramArray[3] = (transform.position - Walker1.transform.position).magnitude;
+            if (Walker1 != null)
+            {
+                paramArray[3] = (transform.position - Walker1.transform.position).magnitude;
+            }else
+            {
+                paramArray[3] = float.NaN;
+            }
             commandServerScript.sendTelemetry(msgSize,paramArray);
         }
 
