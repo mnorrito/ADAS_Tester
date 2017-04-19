@@ -40,10 +40,11 @@ public class CameraRecorder : MonoBehaviour {
         {
             initializeOnFirstFrame();
         }
-        bool cameraFrame = isFrameCameraFrame(fixedUpdateCounter);
-        parameterScript.log("[CameraRecorder][FixedUpdate] fixedUpdateCounter="+ fixedUpdateCounter + " frame=" + Time.frameCount + " isFrameCameraFrame="+ cameraFrame + " fixedTime=" + Time.fixedTime + " fixedDeltaTime=" + Time.fixedDeltaTime + " time=" + Time.time, 2);
         if (cameraEnable == true)
         {
+            bool cameraFrame = isFrameCameraFrame(fixedUpdateCounter);
+            parameterScript.log("[CameraRecorder][FixedUpdate] fixedUpdateCounter="+ fixedUpdateCounter + " frame=" + Time.frameCount + " isFrameCameraFrame="+ cameraFrame + " fixedTime=" + Time.fixedTime + " fixedDeltaTime=" + Time.fixedDeltaTime + " time=" + Time.time, 2);
+
             if (cameraFrame == true)
             {
                 byte[] image = CameraHelper.CaptureFrame(OnBoardCamera);

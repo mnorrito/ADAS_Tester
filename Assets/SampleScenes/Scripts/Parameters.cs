@@ -16,7 +16,7 @@ public class Parameters : MonoBehaviour {
     [SerializeField]
     [Range(0, 3)]
     public int DebugLevel;
-    private static int minimumFrameRate = 120;
+    private static int minimumFrameRate = 60;
     // Use this for initialization
     void Start () {
         string timeStamp = System.DateTime.Now.ToString("yyyy-MM-ddTHH.mm.ss");

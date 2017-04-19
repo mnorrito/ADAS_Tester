@@ -9,6 +9,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
     {
         private float walkSpeedMultiplier;
         private Boolean moveEnable;
+        private Boolean walkerEnable;
 
         private ThirdPersonCharacter m_Character; // A reference to the ThirdPersonCharacter on the object
         private Vector3 m_Move;
@@ -16,18 +17,29 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         private Vector3 position;
         private Vector3 positionOrg;
         private Boolean goAway;
+        private GameObject Walker;
 
 
 
         private void Start()
         {
-            positionOrg = transform.position;
-            goAway = true;
-            walkSpeedMultiplier = GameObject.Find("Parameters").GetComponent<Parameters_Walker>().walkSpeedMultiplier;
-            moveEnable = GameObject.Find("Parameters").GetComponent<Parameters_Walker>().moveEnable;
-            // get the transform of the main camera
-            // get the third person character ( this should never be null due to require component )
-            m_Character = GetComponent<ThirdPersonCharacter>();
+            walkerEnable = GameObject.Find("Parameters").GetComponent<Parameters_Walker>().isWalkerEnabled();
+            Walker = this.gameObject;
+            if (walkerEnable == true)
+            {
+                positionOrg = transform.position;
+                goAway = true;
+                walkSpeedMultiplier = GameObject.Find("Parameters").GetComponent<Parameters_Walker>().getWalkSpeedMultiplier();
+                moveEnable = GameObject.Find("Parameters").GetComponent<Parameters_Walker>().isMoveEnabled();
+                // get the transform of the main camera
+                // get the third person character ( this should never be null due to require component )
+                m_Character = GetComponent<ThirdPersonCharacter>();
+                Walker.SetActive(true);
+            }
+            else
+            {
+                Walker.SetActive(false);
+            }
         }
 
 

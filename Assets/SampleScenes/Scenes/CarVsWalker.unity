@@ -505,25 +505,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 2137423952}
   m_GameObject: {fileID: 922904428}
   m_Mesh: {fileID: 4300010, guid: 2afa5a1773ca1f84f98c062866a8be55, type: 3}
---- !u!1 &954311976 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1109071501834146, guid: 1df73e84a29a13546b693bec543a1422,
-    type: 2}
-  m_PrefabInternal: {fileID: 1594568300}
---- !u!114 &954311977
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 954311976}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e572add472dd5d94391ffe4472ac6cf7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cameraEnable: 1
-  recordingEnable: 0
-  m_fps: 6
 --- !u!1001 &955136400
 Prefab:
   m_ObjectHideFlags: 0
@@ -781,168 +762,68 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4410551705876170, guid: 1df73e84a29a13546b693bec543a1422, type: 2}
+    - target: {fileID: 4748975994299706, guid: 1df73e84a29a13546b693bec543a1422, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4410551705876170, guid: 1df73e84a29a13546b693bec543a1422, type: 2}
+    - target: {fileID: 4748975994299706, guid: 1df73e84a29a13546b693bec543a1422, type: 2}
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4410551705876170, guid: 1df73e84a29a13546b693bec543a1422, type: 2}
+    - target: {fileID: 4748975994299706, guid: 1df73e84a29a13546b693bec543a1422, type: 2}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4410551705876170, guid: 1df73e84a29a13546b693bec543a1422, type: 2}
+    - target: {fileID: 4748975994299706, guid: 1df73e84a29a13546b693bec543a1422, type: 2}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4410551705876170, guid: 1df73e84a29a13546b693bec543a1422, type: 2}
+    - target: {fileID: 4748975994299706, guid: 1df73e84a29a13546b693bec543a1422, type: 2}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4410551705876170, guid: 1df73e84a29a13546b693bec543a1422, type: 2}
+    - target: {fileID: 4748975994299706, guid: 1df73e84a29a13546b693bec543a1422, type: 2}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4410551705876170, guid: 1df73e84a29a13546b693bec543a1422, type: 2}
+    - target: {fileID: 4748975994299706, guid: 1df73e84a29a13546b693bec543a1422, type: 2}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 4410551705876170, guid: 1df73e84a29a13546b693bec543a1422, type: 2}
+    - target: {fileID: 4748975994299706, guid: 1df73e84a29a13546b693bec543a1422, type: 2}
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 114854050950528722, guid: 1df73e84a29a13546b693bec543a1422,
-        type: 2}
-      propertyPath: tracePath
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 114854050950528722, guid: 1df73e84a29a13546b693bec543a1422,
-        type: 2}
-      propertyPath: enableRecording
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114333464256152570, guid: 1df73e84a29a13546b693bec543a1422,
+    - target: {fileID: 114364459797117316, guid: 1df73e84a29a13546b693bec543a1422,
         type: 2}
       propertyPath: Walker1
       value: 
       objectReference: {fileID: 1081143160}
-    - target: {fileID: 114661495081350236, guid: 1df73e84a29a13546b693bec543a1422,
-        type: 2}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114854050950528722, guid: 1df73e84a29a13546b693bec543a1422,
+    - target: {fileID: 114364459797117316, guid: 1df73e84a29a13546b693bec543a1422,
         type: 2}
       propertyPath: adasCarGameObject
       value: 
       objectReference: {fileID: 1079475360}
-    - target: {fileID: 114854050950528722, guid: 1df73e84a29a13546b693bec543a1422,
+    - target: {fileID: 114364459797117316, guid: 1df73e84a29a13546b693bec543a1422,
         type: 2}
       propertyPath: distanceToWalkerText
       value: 
       objectReference: {fileID: 483151231}
-    - target: {fileID: 114854050950528722, guid: 1df73e84a29a13546b693bec543a1422,
+    - target: {fileID: 114364459797117316, guid: 1df73e84a29a13546b693bec543a1422,
         type: 2}
       propertyPath: warningText
       value: 
       objectReference: {fileID: 483151230}
-    - target: {fileID: 114854050950528722, guid: 1df73e84a29a13546b693bec543a1422,
+    - target: {fileID: 114364459797117316, guid: 1df73e84a29a13546b693bec543a1422,
         type: 2}
       propertyPath: debugText
       value: 
       objectReference: {fileID: 483151229}
-    - target: {fileID: 114854050950528722, guid: 1df73e84a29a13546b693bec543a1422,
+    - target: {fileID: 114059406351097448, guid: 1df73e84a29a13546b693bec543a1422,
         type: 2}
-      propertyPath: standalone
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114261983818177358, guid: 1df73e84a29a13546b693bec543a1422,
-        type: 2}
-      propertyPath: walkSpeedMultiplier
-      value: 0.78
-      objectReference: {fileID: 0}
-    - target: {fileID: 114333464256152570, guid: 1df73e84a29a13546b693bec543a1422,
-        type: 2}
-      propertyPath: driving
+      propertyPath: walkerEnable
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 114333464256152570, guid: 1df73e84a29a13546b693bec543a1422,
-        type: 2}
-      propertyPath: standalone
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114661495081350236, guid: 1df73e84a29a13546b693bec543a1422,
-        type: 2}
-      propertyPath: numberOfChannel
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 114661495081350236, guid: 1df73e84a29a13546b693bec543a1422,
-        type: 2}
-      propertyPath: angularResolutionVertical
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 114661495081350236, guid: 1df73e84a29a13546b693bec543a1422,
-        type: 2}
-      propertyPath: angularResolutionHorizontal
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 114661495081350236, guid: 1df73e84a29a13546b693bec543a1422,
-        type: 2}
-      propertyPath: lidarEnable
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114661495081350236, guid: 1df73e84a29a13546b693bec543a1422,
-        type: 2}
-      propertyPath: showRay
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114661495081350236, guid: 1df73e84a29a13546b693bec543a1422,
-        type: 2}
-      propertyPath: fieldOfViewVertical.Array.data[0]
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 114661495081350236, guid: 1df73e84a29a13546b693bec543a1422,
-        type: 2}
-      propertyPath: recordingEnable
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114333464256152570, guid: 1df73e84a29a13546b693bec543a1422,
-        type: 2}
-      propertyPath: fps
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 114854050950528722, guid: 1df73e84a29a13546b693bec543a1422,
-        type: 2}
-      propertyPath: DebugLevel
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114661495081350236, guid: 1df73e84a29a13546b693bec543a1422,
-        type: 2}
-      propertyPath: Velodyne_HDL_64E
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114661495081350236, guid: 1df73e84a29a13546b693bec543a1422,
-        type: 2}
-      propertyPath: rotationRateHz
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 114661495081350236, guid: 1df73e84a29a13546b693bec543a1422,
-        type: 2}
-      propertyPath: LightVelodyne_HDL_64E
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114854050950528722, guid: 1df73e84a29a13546b693bec543a1422,
-        type: 2}
-      propertyPath: Walker1
-      value: 
-      objectReference: {fileID: 1081143160}
-    - target: {fileID: 114261983818177358, guid: 1df73e84a29a13546b693bec543a1422,
-        type: 2}
-      propertyPath: Walker1
-      value: 
-      objectReference: {fileID: 1081143160}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1df73e84a29a13546b693bec543a1422, type: 2}
   m_IsPrefabParent: 0

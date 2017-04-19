@@ -13,7 +13,7 @@ public class CommandServer : MonoBehaviour
 
 
     private SocketIOComponent _socket;
-    private CarController _carController;
+    private int token;
 
     // Use this for initialization
     void Start()
@@ -21,6 +21,7 @@ public class CommandServer : MonoBehaviour
         WaypointAndRemoteCarControl = GameObject.Find("Parameters").GetComponent<Parameters>().adasCarGameObject.GetComponent<WaypointAndRemoteCarControl>();
         _socket = GameObject.Find("SocketIO").GetComponent<SocketIOComponent>();
         _socket.On("toUnityMsg", OnToUnityMsg);
+        token = 1;
     }
     // Update is called once per frame
     void Update()
@@ -52,6 +53,7 @@ public class CommandServer : MonoBehaviour
 
         WaypointAndRemoteCarControl.Acceleration = float.Parse(jsonObject.GetField("1").str);
         WaypointAndRemoteCarControl.Pedestrian = float.Parse(jsonObject.GetField("2").str);
+        token++;
     }
 
     void emptyInfoReceived(SocketIOEvent obj)
@@ -61,20 +63,24 @@ public class CommandServer : MonoBehaviour
 
     public void sendTelemetry(int msgSize, float[] paramArray)
     {
-        UnityMainThreadDispatcher.Instance().Enqueue(() =>
+        if (token > 0)
         {
-            Dictionary<string, string> data = new Dictionary<string, string>();
-
-            data["messageHeader"] = "telemetry";
-            data["messageSize"] = msgSize.ToString();
-
-            for (int i = 0; i < msgSize; i++)
+            UnityMainThreadDispatcher.Instance().Enqueue(() =>
             {
-                data[i.ToString()] = paramArray[i].ToString("N4");
-            }
+                Dictionary<string, string> data = new Dictionary<string, string>();
 
-            _socket.Emit("toExtMsg", new JSONObject(data));
-        });
+                data["messageHeader"] = "telemetry";
+                data["messageSize"] = msgSize.ToString();
+
+                for (int i = 0; i < msgSize; i++)
+                {
+                    data[i.ToString()] = paramArray[i].ToString("N4");
+                }
+
+                _socket.Emit("toExtMsg", new JSONObject(data));
+            });
+            token--;
+        }
     }
 
 

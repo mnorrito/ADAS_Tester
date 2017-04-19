@@ -9,20 +9,21 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1109071501834146}
+  m_RootGameObject: {fileID: 1375707849068062}
   m_IsPrefabParent: 1
---- !u!1 &1109071501834146
+--- !u!1 &1375707849068062
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 4410551705876170}
-  - component: {fileID: 114854050950528722}
-  - component: {fileID: 114661495081350236}
-  - component: {fileID: 114333464256152570}
-  - component: {fileID: 114261983818177358}
+  - component: {fileID: 4748975994299706}
+  - component: {fileID: 114364459797117316}
+  - component: {fileID: 114217211924059528}
+  - component: {fileID: 114568628666776310}
+  - component: {fileID: 114973530960311856}
+  - component: {fileID: 114059406351097448}
   m_Layer: 0
   m_Name: Parameters
   m_TagString: Untagged
@@ -30,12 +31,12 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4410551705876170
+--- !u!4 &4748975994299706
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1109071501834146}
+  m_GameObject: {fileID: 1375707849068062}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -43,72 +44,89 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114261983818177358
+--- !u!114 &114059406351097448
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1109071501834146}
+  m_GameObject: {fileID: 1375707849068062}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e3b01b3f586129e468c1f30f5a6522ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeedMultiplier: 0.8
+  walkerEnable: 0
   moveEnable: 1
---- !u!114 &114333464256152570
+  walkSpeedMultiplier: 0.8
+--- !u!114 &114217211924059528
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1109071501834146}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3de2b540798e2a4d8f0d5b612a89eaf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  driving: 0
-  Walker1: {fileID: 0}
---- !u!114 &114661495081350236
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1109071501834146}
+  m_GameObject: {fileID: 1375707849068062}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7765132485b88dd4580e9c1008365afa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   lidarEnable: 0
+  recordingEnable: 0
   Velodyne_HDL_64E: 0
-  numberOfChannel: 64
+  LightVelodyne_HDL_64E: 1
+  Velodyne_HDL_64EDualMode: 0
+  rotationRateHz: 6
+  numberOfChannel: 32
   fieldOfViewVertical:
   - 2
   angularResolutionVertical: 0.4
   fieldOfViewHorizontal:
   - 0
   - 360
-  angularResolutionHorizontal: 1
+  angularResolutionHorizontal: 5
   measurementRange: 120
   accuracy: 0
   showRay: 0
-  printDebug: 0
---- !u!114 &114854050950528722
+--- !u!114 &114364459797117316
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1109071501834146}
+  m_GameObject: {fileID: 1375707849068062}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f06194d7bc0f74d901ca0fcb960231, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  standalone: 1
-  tracePath: C:\Users\abiscan\Desktop\Workspace\ADAS\Unity\ADAS_Tester\Traces\
-  enableRecording: 0
+  tracePath: 
+  Walker1: {fileID: 0}
   adasCarGameObject: {fileID: 0}
   distanceToWalkerText: {fileID: 0}
   warningText: {fileID: 0}
   debugText: {fileID: 0}
+  DebugLevel: 0
+--- !u!114 &114568628666776310
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1375707849068062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3de2b540798e2a4d8f0d5b612a89eaf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  standalone: 0
+--- !u!114 &114973530960311856
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1375707849068062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e572add472dd5d94391ffe4472ac6cf7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraEnable: 0
+  recordingEnable: 0
+  m_fps: 6
