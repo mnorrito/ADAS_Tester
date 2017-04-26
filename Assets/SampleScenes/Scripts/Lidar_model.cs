@@ -245,7 +245,7 @@ public class Lidar_model : MonoBehaviour
                     lineIterator = 0;
                     createRayCast();
                 }
-                //commandServerScript.sendLidarInfo(4 * lineIterator, floatLines);
+                
                 commandServerScript.sendMsg(CommandServer.MsgHeaderType.lidarInfo, 4 * lineIterator, floatLines);
                 if (recordingEnable == true)
                 {

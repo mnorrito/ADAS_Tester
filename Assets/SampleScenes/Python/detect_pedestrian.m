@@ -1,9 +1,7 @@
-function [throttle] = detect_pedestrian(distanceToWalker, throttle, speed)
+function [pedestrian] = detect_pedestrian(distanceToWalker)
 	echo off all
+  pedestrian=0;
     if (distanceToWalker < 25)
-        throttle = -0.8
-        if (speed < 4)
-            throttle = 0.0
-        end
+        pedestrian = 1
     end
 end

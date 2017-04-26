@@ -13,7 +13,8 @@ public class CommandServer : MonoBehaviour
     private Parameters parameterScript;
 
     private SocketIOComponent _socket;
-    private int token;
+    private int hiPrioToken;
+    private int loPrioToken;
 
     public enum MsgHeaderType
     {
@@ -31,7 +32,8 @@ public class CommandServer : MonoBehaviour
         WaypointAndRemoteCarControl = GameObject.Find("Parameters").GetComponent<Parameters>().adasCarGameObject.GetComponent<WaypointAndRemoteCarControl>();
         _socket = GameObject.Find("SocketIO").GetComponent<SocketIOComponent>();
         _socket.On("toUnityMsg", OnToUnityMsg);
-        token = 2;
+        hiPrioToken = 1;
+        loPrioToken = 1;
     }
     // Update is called once per frame
     void Update()
@@ -62,25 +64,44 @@ public class CommandServer : MonoBehaviour
         JSONObject jsonObject = obj.data;
         //int msgSize = int.Parse(jsonObject.GetField("messageSize").str);
         //float steering = float.Parse(jsonObject.GetField("0").str);
-
+        int responseTo = int.Parse(jsonObject.GetField("responseTo").str);
         WaypointAndRemoteCarControl.Acceleration = float.Parse(jsonObject.GetField("1").str);
         WaypointAndRemoteCarControl.Pedestrian = float.Parse(jsonObject.GetField("2").str);
-        token++;
+        
+        if(responseTo.Equals((int)MsgHeaderType.telemetry))
+        {
+            loPrioToken++;
+        }
+        else
+        {
+            hiPrioToken++;
+        }
+
     }
 
     void emptyInfoReceived(SocketIOEvent obj)
     {
         //print(">>> emptyInfoReceived");
         JSONObject jsonObject = obj.data;
-        token++;
+        loPrioToken++;
     }
 
     public void sendMsg(MsgHeaderType msgHeaderType, int msgSize, float[] dataArray)
     {
+        int token = 0;
+        if(msgHeaderType.Equals(MsgHeaderType.telemetry) && (loPrioToken > 0))
+        {
+            token = 1;
+            loPrioToken--;
+        }
+        if (!msgHeaderType.Equals(MsgHeaderType.telemetry) && (hiPrioToken > 0))
+        {
+            token = 1;
+            hiPrioToken--;
+        }
+
         if (token > 0)
         {
-            //print("<<< Sending msgHeaderType=" + msgHeaderType.ToString());
-
             UnityMainThreadDispatcher.Instance().Enqueue(() =>
             {
                 Dictionary<string, string> data = new Dictionary<string, string>();
@@ -95,7 +116,7 @@ public class CommandServer : MonoBehaviour
 
                 _socket.Emit("toExtMsg", new JSONObject(data));
             });
-            token--;
+            parameterScript.log("Sending " + msgHeaderType + " at frame" + Time.frameCount, 1);
         }
     }
 

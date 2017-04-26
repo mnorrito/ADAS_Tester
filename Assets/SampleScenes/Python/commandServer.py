@@ -29,7 +29,7 @@ class MsgHeaderType(Enum):
 
 @sio.on('connect')
 def connect(sid, environ):
-    sendDriveInfo(sio, 0, 0, 0)
+    sendDriveInfo(sio, MsgHeaderType.telemetry, 0, 0, 0)
 
 @sio.on('toExtMsg')
 def toExtMsg(sid, data):
@@ -43,7 +43,7 @@ def toExtMsg(sid, data):
             receivedCameraImg(data)
         
 def receivedTelemetry(data):        
-    print(">>> Received telemetry")
+    #print(">>> Received telemetry")
     global steering_angle
     global throttle
     global speed
@@ -52,35 +52,38 @@ def receivedTelemetry(data):
     #throttle = float(data["1"])
     speed = float(data["2"])
     distanceToWalker = float(data["3"])
-    sendDriveInfo(sio, steering_angle, throttle, pedestrian)    
-    throttle = drive.speedRegul(throttle, speed)
-    steering_angle, throttle, pedestrian = drive.dstToWlakerAlgo(steering_angle, throttle, speed, distanceToWalker)
+    responseTo = MsgHeaderType.telemetry
+    sendDriveInfo(sio, responseTo, steering_angle, throttle, pedestrian)    
+    throttle = drive.speedRegul(speed, pedestrian)
+    #steering_angle, throttle, pedestrian = drive.dstToWlakerAlgo(steering_angle, throttle, speed, distanceToWalker)
     
 
 def receivedCameraImg(data):
     #print(">>> Received image")
     imageName = data["0"]
     image = Image.open(BytesIO(base64.b64decode(data["0"])))
-    throttle = drive.speedRegul(throttle, speed)
-    sendDriveInfo(sio, steering_angle, throttle, pedestrian)
+    throttle = drive.speedRegul(speed, pedestrian)
+    responseTo = MsgHeaderType.cameraImg
+    sendDriveInfo(sio, responseTo, steering_angle, throttle, pedestrian)    
 
 def receivedLidarInfo(data):
-    print(">>> Received lidar info")
+    #print(">>> Received lidar info")
     global steering_angle
     global throttle
     global speed
     global pedestrian
     msgSize = int(data["messageSize"])
     receivedCoord = []
+    responseTo = MsgHeaderType.lidarInfo
     for coord in range(0, msgSize):
         receivedCoord.append(float(data[str(coord)]))
     #for coord in range(0, int(msgSize/4)):
         #print (str(receivedCoord[4*coord]) + " " + str(receivedCoord[4*coord+1]) + " " + str(receivedCoord[4*coord+2]) + " " + str(receivedCoord[4*coord+3]))
-    throttle = drive.speedRegul(throttle, speed)        
-    steering_angle, throttle, pedestrian = drive.lidarAlgo(steering_angle, throttle, speed, receivedCoord)
-    sendDriveInfo(sio, steering_angle, throttle, pedestrian)
+    throttle = drive.speedRegul(speed, pedestrian)        
+    sendDriveInfo(sio, responseTo, steering_angle, throttle, pedestrian)    
+    pedestrian = drive.lidarAlgo(receivedCoord)
     
-def sendDriveInfo(sio, steering_angle, throttle, pedestrian):
+def sendDriveInfo(sio, responseTo, steering_angle, throttle, pedestrian):
     #print("<<< Sending drive info")
     msgHeader = MsgHeaderType.driveInfo.value
     msgSize = 3
@@ -89,6 +92,7 @@ def sendDriveInfo(sio, steering_angle, throttle, pedestrian):
         data={
             'messageHeader': msgHeader.__str__(),
             'messageSize': msgSize.__str__(),
+            'responseTo': responseTo.value.__str__(),
             '0': steering_angle.__str__(),
             '1': throttle.__str__(),
             '2': pedestrian.__str__()

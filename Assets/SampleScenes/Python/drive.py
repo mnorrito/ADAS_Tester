@@ -1,5 +1,5 @@
-#ADAS_ALGO_SRC = "_octave_"
-ADAS_ALGO_SRC = "_python_"
+ADAS_ALGO_SRC = "_octave_"
+#ADAS_ALGO_SRC = "_python_"
 #ADAS_ALGO_SRC = "_matlab_"
 
 import base64
@@ -27,35 +27,37 @@ if (ADAS_ALGO_SRC == "_matlab_"):
     eng = matlab.engine.start_matlab()
     print("ADAS Algo scr = MATLAB")
 
-MAX_SPEED = 25
-MIN_SPEED = 10
+MAX_SPEED = 15
+MIN_SPEED = 5
 speed_limit = MAX_SPEED
 
 
-def dstToWlakerAlgo(steering_angle, throttle, speed, distanceToWalker):
+def dstToWlakerAlgo(distanceToWalker):
+    pedestrian = 0
     try:
         if (ADAS_ALGO_SRC == "_python_"):
-            throttle, pedestrian = detect_pedestrian(distanceToWalker, throttle, speed)
+            pedestrian = detect_pedestrian(distanceToWalker)
         if (ADAS_ALGO_SRC == "_octave_"):
-            throttle = octave.detect_pedestrian(distanceToWalker, throttle, speed)
+            pedestrian = octave.detect_pedestrian(distanceToWalker)
         if (ADAS_ALGO_SRC == "_matlab_"):
-            eng.detect_pedestrian(distanceToWalker, throttle, speed)
-        pedestrian = 0
+            pedestrian = eng.detect_pedestrian(distanceToWalker)
         #print('{} {} {} {}'.format(steering_angle, throttle, speed, pedestrian))
-        #commandServer.sendDriveInfo(sio, steering_angle, throttle, pedestrian)
     except Exception as e:
         print(e)
-    return steering_angle, throttle, pedestrian
+    return pedestrian
     
-def lidarAlgo(steering_angle, throttle, speed, receivedCoord):
+def lidarAlgo(receivedCoord):
     pedestrian = 0
-    print("------------------------------------")
-    for elem in receivedCoord:
-        print(str(elem))
-    print("------------------------------------")       
-    return steering_angle, throttle, pedestrian
+    #print("------------------------------------")
+    #for elem in receivedCoord:
+        #print(str(elem))
+    #print("------------------------------------")       
+    if (ADAS_ALGO_SRC == "_octave_"):
+        pedestrian = octave.lidarUse(receivedCoord)
+
+    return pedestrian
     
-def speedRegul(throttle, speed):
+def speedRegul(speed, pedestrian):
     global speed_limit
     if speed > speed_limit:
         speed_limit = MIN_SPEED  # slow down
@@ -64,4 +66,8 @@ def speedRegul(throttle, speed):
     throttle = 1 - (speed/speed_limit)**2
     if throttle < 0:
         throttle=0
+    if pedestrian == 1:
+        throttle = -0.8
+        if speed < 4:
+            throttle = 0
     return throttle

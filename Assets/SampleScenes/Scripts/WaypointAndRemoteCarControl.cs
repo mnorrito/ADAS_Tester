@@ -46,7 +46,7 @@ namespace UnityStandardAssets.Vehicles.Car
         [SerializeField]
         private float m_CautiousAngularVelocityFactor = 30f;                     // how cautious the AI should be when considering its own current angular velocity (i.e. easing off acceleration if spinning!)
         [SerializeField]
-        private float m_SteerSensitivity = 0.05f;                                // how sensitively the AI uses steering input to turn to the desired direction
+        private float m_SteerSensitivity = 0.005f;                                // how sensitively the AI uses steering input to turn to the desired direction
         [SerializeField]
         private float m_AccelSensitivity = 0.04f;                                // How sensitively the AI uses the accelerator to reach the current desired speed
         [SerializeField]
@@ -103,15 +103,15 @@ namespace UnityStandardAssets.Vehicles.Car
         }
 
 
-		private void FixedUpdate()
+        private void FixedUpdate()
         {
             fixedUpdateCounter++;
-            parameterScript.log("[WaypointAndRemoteCarControl][FixedUpdate] fixedUpdateCounter=" + fixedUpdateCounter + " frame=" + Time.frameCount +" fixedTime=" + Time.fixedTime + " fixedDeltaTime=" + Time.fixedDeltaTime + " time=" + Time.time, 2);
+            parameterScript.log("[WaypointAndRemoteCarControl][FixedUpdate] fixedUpdateCounter=" + fixedUpdateCounter + " frame=" + Time.frameCount + " fixedTime=" + Time.fixedTime + " fixedDeltaTime=" + Time.fixedDeltaTime + " time=" + Time.time, 2);
             if (m_Target == null || !m_Driving)
             {
                 // Car should not be moving,
                 // use handbrake to stop
-                debugText.text="NULL TARGET";
+                debugText.text = "NULL TARGET";
                 m_CarController.Move(0, 0, -1f, 1f);
             }
             else
@@ -222,15 +222,15 @@ namespace UnityStandardAssets.Vehicles.Car
                 {
                     Boolean pedestrianDetected = false;
                     if (Walker1 != null)
-                    { 
+                    {
                         pedestrianDetected = PedestrianDetected();
                     }
                     if (pedestrianDetected == false)
                     {
- 
+
                         // feed input to the car controller.
                         m_CarController.Move(steer, accel, accel, 0f);
-        
+
                     }
                     else
                     {
@@ -262,7 +262,7 @@ namespace UnityStandardAssets.Vehicles.Car
                     if ((Acceleration == 0) && (Pedestrian == 1.0))
                     {
                         debugText.text = "Hand Break";
-                        handBreak = 1;
+                        //handBreak = 1;
                     }
                     else
                     {
@@ -274,16 +274,11 @@ namespace UnityStandardAssets.Vehicles.Car
                         {
                             debugText.text = "Breaking";
                         }
-                        if (Acceleration == 0)
-                        {
-                            debugText.text = "Hand Break";
-                        }
                     }
-
 
                     m_CarController.Move(steer, Acceleration, Acceleration, handBreak);
                 }
-                
+
 
                 // if appropriate, stop driving when we're close enough to the target.
                 if (m_StopWhenTargetReached && localTarget.magnitude < m_ReachTargetThreshold)
@@ -300,12 +295,14 @@ namespace UnityStandardAssets.Vehicles.Car
             if (Walker1 != null)
             {
                 paramArray[3] = (transform.position - Walker1.transform.position).magnitude;
-            }else
+            }
+            else
             {
                 paramArray[3] = float.NaN;
             }
-            //commandServerScript.sendTelemetry(msgSize,paramArray);
+            if ((Time.frameCount / 2) == (Time.frameCount + 1) / 2) { 
             commandServerScript.sendMsg(CommandServer.MsgHeaderType.telemetry, msgSize, paramArray);
+            }
         }
 
 
