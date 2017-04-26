@@ -304,7 +304,8 @@ namespace UnityStandardAssets.Vehicles.Car
             {
                 paramArray[3] = float.NaN;
             }
-            commandServerScript.sendTelemetry(msgSize,paramArray);
+            //commandServerScript.sendTelemetry(msgSize,paramArray);
+            commandServerScript.sendMsg(CommandServer.MsgHeaderType.telemetry, msgSize, paramArray);
         }
 
 

@@ -752,6 +752,11 @@ Prefab:
       propertyPath: circuit
       value: 
       objectReference: {fileID: 1218151231}
+    - target: {fileID: 114643619351321182, guid: a084dacbb28a70a4aab7ffa2fed5cca0,
+        type: 2}
+      propertyPath: m_Topspeed
+      value: 140
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a084dacbb28a70a4aab7ffa2fed5cca0, type: 2}
   m_IsPrefabParent: 0
@@ -823,6 +828,21 @@ Prefab:
         type: 2}
       propertyPath: onBoardCamEnable
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114493175545322300, guid: 1df73e84a29a13546b693bec543a1422,
+        type: 2}
+      propertyPath: lidarEnable
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114493175545322300, guid: 1df73e84a29a13546b693bec543a1422,
+        type: 2}
+      propertyPath: showRay
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114666932529801644, guid: 1df73e84a29a13546b693bec543a1422,
+        type: 2}
+      propertyPath: walkSpeedMultiplier
+      value: 0.75
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1df73e84a29a13546b693bec543a1422, type: 2}
