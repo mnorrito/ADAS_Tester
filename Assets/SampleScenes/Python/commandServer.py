@@ -43,7 +43,7 @@ def toExtMsg(sid, data):
             receivedCameraImg(data)
         
 def receivedTelemetry(data):        
-    #print(">>> Received telemetry")
+    print(">>> Received telemetry")
     global steering_angle
     global throttle
     global speed

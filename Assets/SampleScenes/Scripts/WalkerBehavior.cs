@@ -19,7 +19,9 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         private Boolean goAway;
         private GameObject Walker;
 
-
+        private Parameters_Walker.MoveDirection xMoveDir;
+        private Parameters_Walker.MoveDirection zMoveDir;
+        private float distToStartPoint;
 
         private void Start()
         {
@@ -35,6 +37,9 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                 // get the third person character ( this should never be null due to require component )
                 m_Character = GetComponent<ThirdPersonCharacter>();
                 Walker.SetActive(true);
+                xMoveDir = GameObject.Find("Parameters").GetComponent<Parameters_Walker>().getXMoveDirection();
+                zMoveDir = GameObject.Find("Parameters").GetComponent<Parameters_Walker>().getZMoveDirection();
+                distToStartPoint = GameObject.Find("Parameters").GetComponent<Parameters_Walker>().getDistToStartPoint();
             }
             else
             {
@@ -66,14 +71,15 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             float v = CrossPlatformInputManager.GetAxis("Vertical");
             bool crouch = Input.GetKey(KeyCode.C);
 
+
             if (goAway == true)
             {
-                if (distance <= 46)
+                if (distance <= distToStartPoint)
                 {
-                    v = 0;
-                    h = 1;
+                    h = (float)xMoveDir;
+                    v = (float)zMoveDir;
                 }
-                if (distance >= 46)
+                if (distance >= distToStartPoint)
                 {
                     //crouch = true;
                     goAway = false;
@@ -84,8 +90,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             {
                 if (distance >= 2)
                 {
-                    v = 0;
-                    h = -1;
+                    h = -(float)xMoveDir;
+                    v = -(float)zMoveDir;
                 }
                 if (distance <= 2)
                 {
@@ -93,20 +99,6 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                 }
             }
 
-
-
-            // calculate move direction to pass to character
-            //if (m_Cam != null)
-            //{
-            // calculate camera relative direction to move:
-            //   m_CamForward = Vector3.Scale(m_Cam.forward, new Vector3(1, 0, 1)).normalized;
-            //   m_Move = v*m_CamForward + h*m_Cam.right;
-            // }
-            // else
-            // {
-            // we use world-relative directions in the case of no main camera
-            //      m_Move = v*Vector3.forward + h*Vector3.right;
-            // }
 
             m_Move = (v * Vector3.forward + h * Vector3.right) * walkSpeedMultiplier;
             if(moveEnable == false)
