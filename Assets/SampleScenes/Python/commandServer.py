@@ -65,7 +65,7 @@ def receivedCameraImg(data):
     sendDriveInfo(sio, steering_angle, throttle, pedestrian)
 
 def receivedLidarInfo(data):
-    #print(">>> Received lidar info")
+    print(">>> Received lidar info")
     global steering_angle
     global throttle
     global speed

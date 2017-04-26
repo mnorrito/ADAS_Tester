@@ -14,3 +14,6 @@ ProjectSettings/*.txt
 *.sln
 *.suo
 *.userprefs
+
+#Remove trace folders
+2017*

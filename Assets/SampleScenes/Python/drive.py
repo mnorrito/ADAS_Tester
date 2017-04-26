@@ -49,8 +49,10 @@ def dstToWlakerAlgo(steering_angle, throttle, speed, distanceToWalker):
     
 def lidarAlgo(steering_angle, throttle, speed, receivedCoord):
     pedestrian = 0
-    #for elem in receivedCoord:
-        #print(str(elem))
+    print("------------------------------------")
+    for elem in receivedCoord:
+        print(str(elem))
+    print("------------------------------------")       
     return steering_angle, throttle, pedestrian
     
 def speedRegul(throttle, speed):
