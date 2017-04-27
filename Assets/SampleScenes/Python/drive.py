@@ -68,6 +68,6 @@ def speedRegul(speed, pedestrian):
         throttle=0
     if pedestrian == 1:
         throttle = -0.8
-        if speed < 4:
+        if speed < 3.5:
             throttle = 0
     return throttle
