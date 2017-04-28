@@ -28,7 +28,7 @@ if (ADAS_ALGO_SRC == "_matlab_"):
     print("ADAS Algo scr = MATLAB")
 
 MAX_SPEED = 15
-MIN_SPEED = 5
+MIN_SPEED = 10
 speed_limit = MAX_SPEED
 
 
@@ -68,6 +68,6 @@ def speedRegul(speed, pedestrian):
         throttle=0
     if pedestrian == 1:
         throttle = -0.8
-        if speed < 3.5:
+        if speed < 3:
             throttle = 0
     return throttle

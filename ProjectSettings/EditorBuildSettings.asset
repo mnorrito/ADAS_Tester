@@ -35,5 +35,7 @@ EditorBuildSettings:
     path: Assets/SampleScenes/Scenes/Fusion.unity
   - enabled: 0
     path: Assets/SampleScenes/Scenes/Scene_1.unity
-  - enabled: 1
+  - enabled: 0
     path: Assets/SampleScenes/Scenes/Scene_2_Highway.unity
+  - enabled: 1
+    path: Assets/SampleScenes/Scenes/Scene_3_singleWalker.unity
