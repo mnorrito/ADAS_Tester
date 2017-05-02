@@ -53,7 +53,9 @@ def lidarAlgo(receivedCoord):
         #print(str(elem))
     #print("------------------------------------")       
     if (ADAS_ALGO_SRC == "_octave_"):
-        pedestrian = octave.lidarUse(receivedCoord)
+        pedestrian = octave.lidarUse_oct(receivedCoord)
+    if (ADAS_ALGO_SRC == "_matlab_"):
+        pedestrian = eng.lidarUse(receivedCoord)
 
     return pedestrian
     

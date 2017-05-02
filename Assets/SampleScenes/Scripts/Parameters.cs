@@ -6,7 +6,6 @@ using System.IO;
 
 public class Parameters : MonoBehaviour {
     public string tracePath;
-    public GameObject Walker1;
     public GameObject adasCarGameObject;
     public Text distanceToWalkerText;
     public Text warningText;

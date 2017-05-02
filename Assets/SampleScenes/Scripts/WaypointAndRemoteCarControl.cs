@@ -12,7 +12,6 @@ namespace UnityStandardAssets.Vehicles.Car
     [RequireComponent(typeof(CarController))]
     public class WaypointAndRemoteCarControl : MonoBehaviour
     {
-        private GameObject Walker1;
         private Text distanceToWalkerText;
         private Text warningText;
         private Text debugText;
@@ -87,7 +86,6 @@ namespace UnityStandardAssets.Vehicles.Car
             parameterScript = GameObject.Find("Parameters").GetComponent<Parameters>();
             commandServerScript = GameObject.Find("IOScriptingTools").GetComponentInChildren<CommandServer>();
             standaloneMode = GameObject.Find("Parameters").GetComponent<Parameters_Car>().isStandalone();
-            Walker1 = GameObject.Find("Parameters").GetComponent<Parameters>().Walker1;
             // get the car controller reference
             m_CarController = GetComponent<CarController>();
 
@@ -221,10 +219,6 @@ namespace UnityStandardAssets.Vehicles.Car
                 if (standaloneMode == true)
                 {
                     Boolean pedestrianDetected = false;
-                    if (Walker1 != null)
-                    {
-                        pedestrianDetected = PedestrianDetected();
-                    }
                     if (pedestrianDetected == false)
                     {
 
@@ -292,14 +286,7 @@ namespace UnityStandardAssets.Vehicles.Car
             paramArray[0] = m_CarController.CurrentSteerAngle;
             paramArray[1] = Acceleration;
             paramArray[2] = m_CarController.CurrentSpeed;
-            if (Walker1 != null)
-            {
-                paramArray[3] = (transform.position - Walker1.transform.position).magnitude;
-            }
-            else
-            {
-                paramArray[3] = float.NaN;
-            }
+            paramArray[3] = float.NaN;
             if ((Time.frameCount / 2) == (Time.frameCount + 1) / 2) { 
             commandServerScript.sendMsg(CommandServer.MsgHeaderType.telemetry, msgSize, paramArray);
             }
@@ -344,17 +331,17 @@ namespace UnityStandardAssets.Vehicles.Car
             m_Target = target;
             m_Driving = true;
         }
-        public Boolean PedestrianDetected()
-        {
-            distanceToWalker = (Walker1.transform.position - transform.position).magnitude;
-            distanceToWalkerText.text = "Distance to walker = " + distanceToWalker.ToString();
+        //public Boolean PedestrianDetected()
+        //{
+        //    distanceToWalker = (Walker1.transform.position - transform.position).magnitude;
+        //    distanceToWalkerText.text = "Distance to walker = " + distanceToWalker.ToString();
 
-            if (distanceToWalker < 17)
-            {
-                return true;
-            }
-            return false;
-        }
+        //    if (distanceToWalker < 17)
+        //    {
+        //        return true;
+        //    }
+        //    return false;
+        //}
 
 
     }

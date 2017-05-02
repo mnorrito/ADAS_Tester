@@ -3913,7 +3913,7 @@ GameObject:
   m_Component:
   - component: {fileID: 443532392}
   m_Layer: 0
-  m_Name: Walkers
+  m_Name: Pedestrians
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3931,8 +3931,8 @@ Transform:
   m_Children:
   - {fileID: 25113031}
   - {fileID: 831403537}
-  - {fileID: 1560029440}
   - {fileID: 1817108698}
+  - {fileID: 1560029440}
   - {fileID: 1884333866}
   m_Father: {fileID: 0}
   m_RootOrder: 6
@@ -11560,7 +11560,7 @@ Prefab:
       objectReference: {fileID: 2100000, guid: 9335c65f42a781d4c881b93bec5412b9, type: 2}
     - target: {fileID: 1136128347017622, guid: 69b6c023474dd9f43b4d29c1f5066e0b, type: 2}
       propertyPath: m_Name
-      value: Walker (2)
+      value: Walker_3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 69b6c023474dd9f43b4d29c1f5066e0b, type: 2}
@@ -11961,7 +11961,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4076100081709654, guid: 69b6c023474dd9f43b4d29c1f5066e0b, type: 2}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4148981279293462, guid: 69b6c023474dd9f43b4d29c1f5066e0b, type: 2}
       propertyPath: m_LocalRotation.x
@@ -11984,6 +11984,10 @@ Prefab:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 9335c65f42a781d4c881b93bec5412b9, type: 2}
+    - target: {fileID: 1136128347017622, guid: 69b6c023474dd9f43b4d29c1f5066e0b, type: 2}
+      propertyPath: m_Name
+      value: Walker_2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 69b6c023474dd9f43b4d29c1f5066e0b, type: 2}
   m_IsPrefabParent: 0
@@ -13942,7 +13946,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4076100081709654, guid: 69b6c023474dd9f43b4d29c1f5066e0b, type: 2}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4148981279293462, guid: 69b6c023474dd9f43b4d29c1f5066e0b, type: 2}
       propertyPath: m_LocalRotation.x
@@ -13962,7 +13966,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1136128347017622, guid: 69b6c023474dd9f43b4d29c1f5066e0b, type: 2}
       propertyPath: m_Name
-      value: Walker (1)
+      value: Walker_1
       objectReference: {fileID: 0}
     - target: {fileID: 4076100081709654, guid: 69b6c023474dd9f43b4d29c1f5066e0b, type: 2}
       propertyPath: m_LocalScale.z

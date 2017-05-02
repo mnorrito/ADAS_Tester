@@ -21,8 +21,6 @@ INSTALLATION GUIDE
         ADAS_Tester\Assets\SampleScenes\Python
     Type:
         conda env create -f environments.yml
-    To allow octave functions call from python scripts:
-        conda install -c conda-forge oct2py
     
     To allow Matlab functions call from python scripts:     
         cd [matlabroot]\extern\engines\python

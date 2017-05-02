@@ -55,8 +55,6 @@ def receivedTelemetry(data):
     responseTo = MsgHeaderType.telemetry
     sendDriveInfo(sio, responseTo, steering_angle, throttle, pedestrian)    
     throttle = drive.speedRegul(speed, pedestrian)
-    #steering_angle, throttle, pedestrian = drive.dstToWlakerAlgo(steering_angle, throttle, speed, distanceToWalker)
-    
 
 def receivedCameraImg(data):
     #print(">>> Received image")
