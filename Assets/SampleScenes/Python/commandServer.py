@@ -8,6 +8,7 @@ from flask import Flask
 from io import BytesIO
 from enum import Enum
 import drive
+import numpy as np
 
 sio = socketio.Server()
 app = Flask(__name__)
@@ -58,11 +59,19 @@ def receivedTelemetry(data):
 
 def receivedCameraImg(data):
     #print(">>> Received image")
+    global steering_angle
+    global throttle
+    global speed
+    global pedestrian   
     imageName = data["0"]
-    image = Image.open(BytesIO(base64.b64decode(data["0"])))
+    imageBytes = BytesIO(base64.b64decode(data["1"]))
     throttle = drive.speedRegul(speed, pedestrian)
     responseTo = MsgHeaderType.cameraImg
     sendDriveInfo(sio, responseTo, steering_angle, throttle, pedestrian)    
+    image = Image.open(imageBytes)
+    image.show()
+    image_array = np.asarray(image)
+    pedestrian = drive.imageAlgo(image_array)
 
 def receivedLidarInfo(data):
     #print(">>> Received lidar info")

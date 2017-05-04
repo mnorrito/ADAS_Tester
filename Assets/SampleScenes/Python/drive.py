@@ -1,6 +1,6 @@
-ADAS_ALGO_SRC = "_octave_"
+#ADAS_ALGO_SRC = "_octave_"
 #ADAS_ALGO_SRC = "_python_"
-#ADAS_ALGO_SRC = "_matlab_"
+ADAS_ALGO_SRC = "_matlab_"
 
 import base64
 import os
@@ -11,6 +11,7 @@ from PIL import Image
 from flask import Flask
 from io import BytesIO
 import commandServer
+
 
 if (ADAS_ALGO_SRC == "_python_"):
     from adasAlgo import detect_pedestrian
@@ -45,6 +46,20 @@ def dstToWlakerAlgo(distanceToWalker):
     except Exception as e:
         print(e)
     return pedestrian
+    
+def imageAlgo(image_array):
+    pedestrian = 0
+    try:
+        if (ADAS_ALGO_SRC == "_matlab_"):
+            pedestrian = 0
+            print("Received image with size " + image_array.shape)
+            image_lst = image_array.tolist()
+            pedestrian = eng.imageUse(image_lst)
+    except Exception as e:
+        print(e)
+
+    return pedestrian
+    
     
 def lidarAlgo(receivedCoord):
     pedestrian = 0

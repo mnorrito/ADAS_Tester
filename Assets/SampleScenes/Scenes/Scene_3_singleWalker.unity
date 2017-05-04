@@ -15939,12 +15939,12 @@ Prefab:
         type: 2}
       propertyPath: m_TargetTexture
       value: 
-      objectReference: {fileID: 8400000, guid: bf9da2b849312da4791a8191c2763616, type: 2}
+      objectReference: {fileID: 8400000, guid: 1fdb3b4bb0383134cafa988a6ace7301, type: 2}
     - target: {fileID: 20813107162341774, guid: a084dacbb28a70a4aab7ffa2fed5cca0,
         type: 2}
       propertyPath: m_TargetTexture
       value: 
-      objectReference: {fileID: 8400000, guid: bf9da2b849312da4791a8191c2763616, type: 2}
+      objectReference: {fileID: 8400000, guid: 1fdb3b4bb0383134cafa988a6ace7301, type: 2}
     - target: {fileID: 4248072078829996, guid: a084dacbb28a70a4aab7ffa2fed5cca0, type: 2}
       propertyPath: m_RootOrder
       value: 1
