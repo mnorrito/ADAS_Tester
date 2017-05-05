@@ -1,9 +1,5 @@
 function [pedestrian] = imageUse(img)
 
-    vect=[];
-    rCol = [];
-    gCol = [];
-    bCol = [];
     rMat = [];
     gMat = [];
     bMat = [];

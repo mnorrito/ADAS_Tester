@@ -52,7 +52,7 @@ def imageAlgo(image_array):
     try:
         if (ADAS_ALGO_SRC == "_matlab_"):
             pedestrian = 0
-            print("Received image with size " + image_array.shape)
+            print(image_array.shape)
             image_lst = image_array.tolist()
             pedestrian = eng.imageUse(image_lst)
     except Exception as e:
