@@ -58,7 +58,7 @@ def receivedTelemetry(data):
     throttle = drive.speedRegul(speed, pedestrian)
 
 def receivedCameraImg(data):
-    #print(">>> Received image")
+    print(">>> Received image")
     global steering_angle
     global throttle
     global speed

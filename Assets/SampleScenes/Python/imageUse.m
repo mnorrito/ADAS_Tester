@@ -16,5 +16,10 @@ function [pedestrian] = imageUse(lineNum, colNum, img)
     rgbMat(:,:,2) = double(gVec.')/256;
     rgbMat(:,:,3) = double(bVec.')/256;
     
+    %detector = vision.PeopleDetector;
+    [bboxes, scores] = detectPeopleACF(rgbMat,'Model','caltech-50x21');
+    rgbMat = insertObjectAnnotation(rgbMat, 'rectangle', bboxes, 'Pedestrian Detected'); 
+    imshow(rgbMat);
+    %image(rgbMat);
     pedestrian = 0;
 end
