@@ -15934,7 +15934,7 @@ Prefab:
         type: 2}
       propertyPath: m_TargetTexture
       value: 
-      objectReference: {fileID: 8400000, guid: bf9da2b849312da4791a8191c2763616, type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 20194073151258626, guid: a084dacbb28a70a4aab7ffa2fed5cca0,
         type: 2}
       propertyPath: m_TargetTexture

@@ -1,35 +1,20 @@
-function [pedestrian] = imageUse(img)
-
-    rMat = [];
-    gMat = [];
-    bMat = [];
-    lineNum = size(img,2);
-    for ln = 1:lineNum
-        colArray = img{ln};
-        colNum = size(colArray,2);
-        rCol = [];
-        gCol = [];
-        bCol = [];
-        for cl = 1: colNum
-            rgbArray = colArray{cl};
-            rCol = [rCol rgbArray{1}];
-            gCol = [gCol rgbArray{2}];
-            bCol = [bCol rgbArray{3}];
-        end
-        if size(rMat,2) == 0
-            rMat = rCol;
-            gMat = gCol;
-            bMat = bCol;
-        else
-            rMat = [rMat ; rCol];
-            gMat = [gMat ; gCol];
-            bMat = [bMat ; bCol];
-        end
-    end
-
-    rgbMat(:,:,1) = double(rMat)/256;
-    rgbMat(:,:,2) = double(gMat)/256;
-    rgbMat(:,:,3) = double(bMat)/256;
+function [pedestrian] = imageUse(lineNum, colNum, img)
+    vec = img(1:3:end);
+    vec = cell2mat(vec);
+    rVec = reshape(vec,colNum, lineNum);
     
-    image(rgbMat);
+    vec = img(2:3:end);
+    vec = cell2mat(vec);
+    gVec = reshape(vec,colNum, lineNum);
+
+    vec = img(3:3:end);
+    vec = cell2mat(vec);
+    bVec = reshape(vec,colNum, lineNum);
+
+    
+    rgbMat(:,:,1) = double(rVec.')/256;
+    rgbMat(:,:,2) = double(gVec.')/256;
+    rgbMat(:,:,3) = double(bVec.')/256;
+    
+    pedestrian = 0;
 end

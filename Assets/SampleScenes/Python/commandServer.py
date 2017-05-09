@@ -58,7 +58,7 @@ def receivedTelemetry(data):
     throttle = drive.speedRegul(speed, pedestrian)
 
 def receivedCameraImg(data):
-    print(">>> Received image")
+    #print(">>> Received image")
     global steering_angle
     global throttle
     global speed
@@ -69,7 +69,7 @@ def receivedCameraImg(data):
     responseTo = MsgHeaderType.cameraImg
     sendDriveInfo(sio, responseTo, steering_angle, throttle, pedestrian)    
     image = Image.open(imageBytes)
-    image.show()
+    #image.show()
     image_array = np.asarray(image)
     pedestrian = drive.imageAlgo(image_array)
 
