@@ -1,5 +1,8 @@
 function [pedestrian] = lidarUse(lidMatrix)
-	echo off all
+
+
+  %lidMatrix = evalin('base','lidMatrix')
+  
   len = length(lidMatrix);
   pedestrian = 0;
   for coordIndex = 1:len/4

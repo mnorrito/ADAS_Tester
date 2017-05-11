@@ -11,7 +11,7 @@ from PIL import Image
 from flask import Flask
 from io import BytesIO
 import commandServer
-
+import numpy as np
 
 if (ADAS_ALGO_SRC == "_python_"):
     from adasAlgo import detect_pedestrian
@@ -25,10 +25,25 @@ if (ADAS_ALGO_SRC == "_octave_"):
     
 if (ADAS_ALGO_SRC == "_matlab_"):
     import matlab.engine
+
+    ### USE MATLAB .M FILE
     eng = matlab.engine.start_matlab()
+
+    
+    ### USE SIMULINK MODEL
+    # future=matlab.engine.connect_matlab(async=True)
+    # eng=future.result()
+    lidMatrixInit = np.zeros((1,120))
+    eng.workspace['lidMatrix'] = lidMatrixInit.ravel().tolist()
+    eng.sim("lidarUseModel",async=True)
+    eng.set_param('lidarUseModel','Solver','ode15s','StopTime','0.1',nargout=0)
+    eng.set_param('lidarUseModel','Solver','ode15s','StopTime','inf',nargout=0)
+    eng.set_param('lidarUseModel','SimulationCommand','start',async=True, nargout=0)
+    eng.set_param('lidarUseModel','SimulationCommand','pause',async=True, nargout=0)
+    
     print("ADAS Algo scr = MATLAB")
 
-MAX_SPEED = 15
+MAX_SPEED = 12
 MIN_SPEED = 10
 speed_limit = MAX_SPEED
 
@@ -49,14 +64,10 @@ def dstToWlakerAlgo(distanceToWalker):
     
 def imageAlgo(image_array):
     pedestrian = 0
-    try:
-        if (ADAS_ALGO_SRC == "_matlab_"):
-            pedestrian = 0
-            shape = image_array.shape
-            pedestrian = eng.imageUse(shape[0], shape[1], image_array.ravel().tolist())
-    except Exception as e:
-        print(e)
-
+    if (ADAS_ALGO_SRC == "_matlab_"):
+        shape = image_array.shape
+        pedestrian = eng.imageUse(shape[0], shape[1], image_array.ravel().tolist())
+        print("Image algo done!")
     return pedestrian
     
     
@@ -69,8 +80,16 @@ def lidarAlgo(receivedCoord):
     if (ADAS_ALGO_SRC == "_octave_"):
         pedestrian = octave.lidarUse_oct(receivedCoord)
     if (ADAS_ALGO_SRC == "_matlab_"):
-        pedestrian = eng.lidarUse(receivedCoord)
-
+        ### USE MATLAB .M FILE
+        #pedestrian = eng.lidarUse(receivedCoord)
+        
+        ### USE SIMULINK MODEL
+        eng.set_param('lidarUseModel','SimulationCommand','continue',async=True, nargout=0)
+        eng.workspace['lidMatrix'] = receivedCoord
+        eng.set_param('lidarUseModel','SimulationCommand','pause',async=True,nargout=0)
+        pedestrianVec  = eng.eval('pedestrian.Data(size(pedestrian.Data))')
+        pedestrian = pedestrianVec[0][0]
+        print("pedestrian =" + str(pedestrian))
     return pedestrian
     
 def speedRegul(speed, pedestrian):

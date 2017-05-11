@@ -67,8 +67,8 @@ public class CommandServer : MonoBehaviour
         int responseTo = int.Parse(jsonObject.GetField("responseTo").str);
         WaypointAndRemoteCarControl.Acceleration = float.Parse(jsonObject.GetField("1").str);
         WaypointAndRemoteCarControl.Pedestrian = float.Parse(jsonObject.GetField("2").str);
-        
-        if(responseTo.Equals((int)MsgHeaderType.telemetry))
+
+        if (responseTo.Equals((int)MsgHeaderType.telemetry))
         {
             loPrioToken++;
         }

@@ -74,7 +74,7 @@ def receivedCameraImg(data):
     pedestrian = drive.imageAlgo(image_array)
 
 def receivedLidarInfo(data):
-    #print(">>> Received lidar info")
+    print(">>> Received lidar info")
     global steering_angle
     global throttle
     global speed
@@ -91,7 +91,7 @@ def receivedLidarInfo(data):
     pedestrian = drive.lidarAlgo(receivedCoord)
     
 def sendDriveInfo(sio, responseTo, steering_angle, throttle, pedestrian):
-    #print("<<< Sending drive info")
+    print("<<< Sending drive info")
     msgHeader = MsgHeaderType.driveInfo.value
     msgSize = 3
     sio.emit(
