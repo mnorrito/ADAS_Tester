@@ -39,7 +39,7 @@ if (ADAS_ALGO_SRC == "_matlab_"):
     eng.set_param('lidarUseModel','Solver','ode15s','StopTime','0.1',nargout=0)
     eng.set_param('lidarUseModel','Solver','ode15s','StopTime','inf',nargout=0)
     eng.set_param('lidarUseModel','SimulationCommand','start',async=True, nargout=0)
-    eng.set_param('lidarUseModel','SimulationCommand','pause',async=True, nargout=0)
+    #eng.set_param('lidarUseModel','SimulationCommand','pause',async=True, nargout=0)
     
     print("ADAS Algo scr = MATLAB")
 
@@ -84,9 +84,9 @@ def lidarAlgo(receivedCoord):
         #pedestrian = eng.lidarUse(receivedCoord)
         
         ### USE SIMULINK MODEL
-        eng.set_param('lidarUseModel','SimulationCommand','continue',async=True, nargout=0)
+        eng.set_param('lidarUseModel','SimulationCommand','pause',async=True, nargout=0)
         eng.workspace['lidMatrix'] = receivedCoord
-        eng.set_param('lidarUseModel','SimulationCommand','pause',async=True,nargout=0)
+        eng.set_param('lidarUseModel','SimulationCommand','continue',async=True,nargout=0)
         pedestrianVec  = eng.eval('pedestrian.Data(size(pedestrian.Data))')
         pedestrian = pedestrianVec[0][0]
         print("pedestrian =" + str(pedestrian))
