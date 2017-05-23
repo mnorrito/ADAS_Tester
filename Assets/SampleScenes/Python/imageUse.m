@@ -26,9 +26,9 @@ function [pedestrian] = imageUse(lineNum, colNum, img)
     rgbMat(:,:,3) = double(bVec.')/256;
     
     [bboxes, scores] = detectPeopleACF(rgbMat,'Model','caltech-50x21');
-    bboxes
-    scores
-    sizes = size(bboxes)
+    %bboxes
+    %scores
+    sizes = size(bboxes);
     if sizes(1) > 0
         for pedItem = 1:sizes(1)
 			if scores(pedItem,1) > 70
@@ -45,6 +45,6 @@ function [pedestrian] = imageUse(lineNum, colNum, img)
 			end
 		end
     end
-    rgbMat = insertObjectAnnotation(rgbMat, 'rectangle', bboxes, 'Pedestrian Detected'); 
-    imshow(rgbMat);
+    %rgbMat = insertObjectAnnotation(rgbMat, 'rectangle', bboxes, 'Pedestrian Detected'); 
+    %imshow(rgbMat);
 end
