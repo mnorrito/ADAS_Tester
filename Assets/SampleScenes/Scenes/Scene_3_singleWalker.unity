@@ -15947,7 +15947,7 @@ Prefab:
     - target: {fileID: 114643619351321182, guid: a084dacbb28a70a4aab7ffa2fed5cca0,
         type: 2}
       propertyPath: m_Topspeed
-      value: 15
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 114868732430176816, guid: a084dacbb28a70a4aab7ffa2fed5cca0,
         type: 2}

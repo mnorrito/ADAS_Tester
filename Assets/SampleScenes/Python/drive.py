@@ -2,6 +2,9 @@
 #ADAS_ALGO_SRC = "_python_"
 ADAS_ALGO_SRC = "_matlab_"
 
+ADAS_SENSOR = "_lidar_"
+#ADAS_SENSOR = "_camera_"
+
 import base64
 import os
 import socketio
@@ -33,21 +36,24 @@ if (ADAS_ALGO_SRC == "_matlab_"):
         print("Sharing existing Matlab session: " + str(matSessions[0]))
         future=matlab.engine.connect_matlab(async=True)
         eng=future.result()
-    
-    lidMatrixInit = np.zeros((1,120))
-    eng.workspace['lidMatrix'] = lidMatrixInit.ravel().tolist()
-    eng.sim("lidarUseModel",async=True)
-    eng.set_param('lidarUseModel','Solver','ode15s','StopTime','0.1',nargout=0)
-    eng.set_param('lidarUseModel','Solver','ode15s','StopTime','inf',nargout=0)
-    eng.set_param('lidarUseModel','SimulationCommand','start',async=True, nargout=0)
 
-    # imageInit = np.zeros((1,921600))
-    # eng.workspace['image'] = imageInit.ravel().tolist()
-    # eng.sim("cameraUseModel",async=True)
-    # eng.set_param('cameraUseModel','Solver','ode15s','StopTime','0.1',nargout=0)
-    # eng.set_param('cameraUseModel','Solver','ode15s','StopTime','inf',nargout=0)
-    # eng.set_param('cameraUseModel','SimulationCommand','start',async=True, nargout=0)
+    if (ADAS_SENSOR == "_lidar_"):    
+        print("SENSOR = lidar") 
+        lidMatrixInit = np.zeros((1,120))
+        eng.workspace['lidMatrix'] = lidMatrixInit.ravel().tolist()
+        eng.sim("lidarUseModel",async=True)
+        eng.set_param('lidarUseModel','Solver','ode15s','StopTime','0.1',nargout=0)
+        eng.set_param('lidarUseModel','Solver','ode15s','StopTime','inf',nargout=0)
+        eng.set_param('lidarUseModel','SimulationCommand','start',async=True, nargout=0)
 
+    if (ADAS_SENSOR == "_camera_"): 
+        print("SENSOR = camera")    
+        imageInit = np.zeros((1,921600))
+        eng.workspace['cameraImage'] = imageInit.ravel().tolist()
+        eng.sim("cameraUseModel",async=True)
+        eng.set_param('cameraUseModel','Solver','ode15s','StopTime','0.1',nargout=0)
+        eng.set_param('cameraUseModel','Solver','ode15s','StopTime','inf',nargout=0)
+        eng.set_param('cameraUseModel','SimulationCommand','start',async=True, nargout=0)
     
     print("ADAS Algo scr = MATLAB")
 
@@ -80,7 +86,7 @@ def imageAlgo(image_array):
         
         ### USE SIMULINK MODEL
         eng.set_param('cameraUseModel','SimulationCommand','pause',async=True, nargout=0)
-        eng.workspace['image'] = image
+        eng.workspace['cameraImage'] = image
         eng.set_param('cameraUseModel','SimulationCommand','continue',async=True,nargout=0)
         pedestrianVec  = eng.eval('pedestrian.Data(size(pedestrian.Data))')
         pedestrian = pedestrianVec[0][0]
